@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 14, 2016 at 04:42 PM
+-- Generation Time: Nov 14, 2016 at 04:46 PM
 -- Server version: 5.6.30-1
 -- PHP Version: 7.0.12-1
 
@@ -33,7 +33,9 @@ CREATE TABLE `epreuves` (
   `date` date NOT NULL,
   `photo` text NOT NULL,
   `inscription` tinyint(1) NOT NULL,
-  `id_evenement` varchar(23) NOT NULL
+  `id_evenement` varchar(23) NOT NULL,
+  `nb_participants` int(11) NOT NULL,
+  `nb_participants_max` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -51,7 +53,8 @@ CREATE TABLE `evenements` (
   `description` text NOT NULL,
   `discipline` text NOT NULL,
   `etat` text NOT NULL,
-  `id_organisateur` varchar(23) NOT NULL
+  `id_organisateur` varchar(23) NOT NULL,
+  `nb_participants` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
