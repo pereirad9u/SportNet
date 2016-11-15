@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4deb1
+-- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Nov 14, 2016 at 04:46 PM
--- Server version: 5.6.30-1
--- PHP Version: 7.0.12-1
+-- Client :  127.0.0.1
+-- Généré le :  Mar 15 Novembre 2016 à 08:44
+-- Version du serveur :  5.7.14
+-- Version de PHP :  5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sportnet`
+-- Base de données :  `sportnet`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `epreuves`
+-- Structure de la table `epreuves`
 --
 
 CREATE TABLE `epreuves` (
@@ -35,16 +35,17 @@ CREATE TABLE `epreuves` (
   `inscription` tinyint(1) NOT NULL,
   `id_evenement` varchar(23) NOT NULL,
   `nb_participants` int(11) NOT NULL,
-  `nb_participants_max` int(11) NOT NULL
+  `nb_participants_max` int(11) NOT NULL,
+  `prix` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `evenements`
+-- Structure de la table `events`
 --
 
-CREATE TABLE `evenements` (
+CREATE TABLE `events` (
   `id` varchar(23) NOT NULL,
   `nom` text NOT NULL,
   `lieu` text NOT NULL,
@@ -60,10 +61,10 @@ CREATE TABLE `evenements` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `organisateurs`
+-- Structure de la table `organisers`
 --
 
-CREATE TABLE `organisateurs` (
+CREATE TABLE `organisers` (
   `id` varchar(23) NOT NULL,
   `nom` text NOT NULL,
   `prenom` text NOT NULL,
@@ -77,21 +78,10 @@ CREATE TABLE `organisateurs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `participe`
+-- Structure de la table `results`
 --
 
-CREATE TABLE `participe` (
-  `id_utilisateur` varchar(23) NOT NULL,
-  `id_epreuve` varchar(23) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `resultats`
---
-
-CREATE TABLE `resultats` (
+CREATE TABLE `results` (
   `id` varchar(23) NOT NULL,
   `classement` int(11) NOT NULL,
   `temps` time NOT NULL,
@@ -102,10 +92,10 @@ CREATE TABLE `resultats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utilisateurs`
+-- Structure de la table `users`
 --
 
-CREATE TABLE `utilisateurs` (
+CREATE TABLE `users` (
   `id` varchar(23) NOT NULL,
   `nom` text NOT NULL,
   `prenom` text NOT NULL,
@@ -114,57 +104,57 @@ CREATE TABLE `utilisateurs` (
   `motdepasse` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Indexes for dumped tables
+-- Structure de la table `users_epreuves`
+--
+
+CREATE TABLE `users_epreuves` (
+  `id_users` varchar(23) NOT NULL,
+  `id_epreuves` varchar(23) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Index pour les tables exportées
 --
 
 --
--- Indexes for table `epreuves`
+-- Index pour la table `epreuves`
 --
 ALTER TABLE `epreuves`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `evenements`
+-- Index pour la table `events`
 --
-ALTER TABLE `evenements`
+ALTER TABLE `events`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `organisateurs`
+-- Index pour la table `organisers`
 --
-ALTER TABLE `organisateurs`
+ALTER TABLE `organisers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `participe`
+-- Index pour la table `results`
 --
-ALTER TABLE `participe`
-  ADD KEY `id_utilisateur` (`id_utilisateur`),
-  ADD KEY `id_epreuve` (`id_epreuve`);
-
---
--- Indexes for table `resultats`
---
-ALTER TABLE `resultats`
+ALTER TABLE `results`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `utilisateurs`
+-- Index pour la table `users`
 --
-ALTER TABLE `utilisateurs`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Constraints for dumped tables
+-- Index pour la table `users_epreuves`
 --
-
---
--- Constraints for table `participe`
---
-ALTER TABLE `participe`
-  ADD CONSTRAINT `participe_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id`),
-  ADD CONSTRAINT `participe_ibfk_2` FOREIGN KEY (`id_epreuve`) REFERENCES `epreuves` (`id`);
+ALTER TABLE `users_epreuves`
+  ADD PRIMARY KEY (`id_users`,`id_epreuves`),
+  ADD KEY `id_epreuves` (`id_epreuves`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
