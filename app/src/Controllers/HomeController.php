@@ -18,5 +18,5 @@ final class HomeController
         $this->logger = $logger;
         $this->user = $user;
     }
-
+    
 }

@@ -19,12 +19,4 @@ final class UserController
 		$this->model = $user;
     }
 
-    public function dispatch(Request $request, Response $response, $args)
-    {
-        $this->logger->info("Home page action dispatched");
-		
-		$users = $this->model->show();
-
-		return $this->view->render($response, 'users.twig', ["data" => $users]);
-    }
 }
