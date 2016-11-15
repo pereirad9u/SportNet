@@ -7,3 +7,5 @@
 $app->get('/', 'App\Controllers\HomeController:dispatch')->setName('homepage');
 
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
+
+$app->get('/creationEpreuve', 'App\Controllers\UserController:creationEpreuve');

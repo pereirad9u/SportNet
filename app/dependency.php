@@ -91,6 +91,12 @@ $container['App\Controllers\UserController'] = function ($c) {
 		$c->get('App\Repositories\UserRepository')
     );
 };
+
+$container['App\Controllers\UserController'] = function ($c) {
+    return new App\Controllers\EpreuveController(
+        $c
+    );
+};
 # -----------------------------------------------------------------------------
 # Factories Models
 # -----------------------------------------------------------------------------
