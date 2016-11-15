@@ -22,9 +22,6 @@ $(function () {
         },
 
         messages: {
-            association : {
-                required : "Nom association requis"
-            },
             passwordValidate: {
                 required: "Confirmez votre mot de passe",
                 equalTo: "Mots de passe différents"
@@ -41,9 +38,6 @@ $(function () {
             },
             email: {
                 required: "Email requis"
-            },
-            website: {
-                required: "website requis"
             },
 
             tel: {

@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Organisers;
+use App\Models\User;
+
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -155,8 +158,6 @@ final class UserController
                     $prenom = filter_var ( $prenom, FILTER_SANITIZE_STRING );
                     $email = filter_var ( $email, FILTER_SANITIZE_EMAIL );
                     $tel = filter_var($tel, FILTER_SANITIZE_STRING );
-                    $website = filter_var($website, FILTER_SANITIZE_STRING );
-                    $asso = filter_var($asso, FILTER_SANITIZE_STRING );
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
@@ -165,10 +166,10 @@ final class UserController
                     $m->nom = $nom;
                     $m->prenom = $prenom;
                     $m->email = $email;
-                    $m->siteweb = $website;
                     $m->telephone = $tel;
                     $m->motdepasse = $pass;
                     $m->save ();
+                    var_dump($_SESSION);
                     return $response->withRedirect($this->router->pathFor('homepage'));
 
                 }
@@ -195,14 +196,15 @@ final class UserController
     }
 
     public function loginOrg(Request $request, Response $response, $args) {
-        if(isset($_POST['action']) && $_POST['action'] == 'login') {
+        if(isset($_POST['action']) && $_POST['action'] == 'loginorg') {
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
                 $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-                $m = Organisers::where("email", $email)->get()->first();
-                if(isset($m->uniqid)) {
-                    if (password_verify($password, $m->password)) {
-                        $_SESSION["uniqid"] = $m->uniqid;
+                $m = Organisers::where("email", "=", $email)->get()->first();
+                if(isset($m->id)) {
+                    if (password_verify($password, $m->motdepasse)) {
+                        $_SESSION["uniqid"] = $m->id;
+                        $_SESSION["type"] = 'org';
                         return $response->withRedirect($this->router->pathFor('homepage'));
                     }
                     else {
@@ -223,14 +225,15 @@ final class UserController
     }
 
     public function loginUser(Request $request, Response $response, $args) {
-        if(isset($_POST['action']) && $_POST['action'] == 'login') {
+        if(isset($_POST['action']) && $_POST['action'] == 'loginuser') {
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
                 $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
                 $m = User::where("email", $email)->get()->first();
-                if(isset($m->uniqid)) {
-                    if (password_verify($password, $m->password)) {
-                        $_SESSION["uniqid"] = $m->uniqid;
+                if(isset($m->id)) {
+                    if (password_verify($password, $m->motdepasse)) {
+                        $_SESSION["uniqid"] = $m->id;
+                        $_SESSION["type"] = 'user';
                         return $response->withRedirect($this->router->pathFor('homepage'));
                     }
                     else {
