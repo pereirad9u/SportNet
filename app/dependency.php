@@ -91,6 +91,13 @@ $container['App\Controllers\UserController'] = function ($c) {
 		$c->get('App\Repositories\UserRepository')
     );
 };
+
+$container['App\Controllers\EventController'] = function ($c) {
+    return new App\Controllers\EventController(
+        $c
+    );
+};
+
 # -----------------------------------------------------------------------------
 # Factories Models
 # -----------------------------------------------------------------------------
