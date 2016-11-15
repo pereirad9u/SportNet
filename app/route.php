@@ -9,7 +9,7 @@ $app->get('/', 'App\Controllers\UserController:dispatch')->setName('homepage');
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
 
 
-$app->get('/creationEpreuve', 'App\Controllers\UserController:creationEpreuve');
+$app->get('/createEpreuve/{id}', 'App\Controllers\UserController:creationEpreuve')->setName('createEpreuve');
 
 $app->get('/signup', 'App\Controllers\UserController:signup')->setName('signup');
 
