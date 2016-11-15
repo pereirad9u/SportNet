@@ -16,7 +16,7 @@ final class HomeController
     {
         $this->view = $view;
         $this->logger = $logger;
-        $this->model = $user;
+        $this->user = $user;
     }
     
 }

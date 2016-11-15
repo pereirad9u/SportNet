@@ -8,12 +8,13 @@ $app->get('/', 'App\Controllers\UserController:dispatch')->setName('homepage');
 
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
 
+$app->get('/createEpreuve/{id}', 'App\Controllers\UserController:creationEpreuve')->setName('createEpreuve');
+
 $app->get('/signuporg', 'App\Controllers\UserController:signupOrg')->setName('signuporg');
 
 $app->get('/createevent','App\Controllers\EventController:formEvent')->setName('formulaire');
 
 $app->post('/createevent','App\Controllers\EventController:saveEvent');
-
 
 $app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 

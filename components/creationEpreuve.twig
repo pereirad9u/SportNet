@@ -1,0 +1,48 @@
+<div class="container">
+    <form class="span-8 offset-2" method="post" id='createEpreuve' name="createEpreuve" enctype="multipart/form-data">
+        <div class="row">
+            <div class="input-field span-5">
+                <p>Nom de l'épreuve</p>
+                <input id="nom" name="nom" aria-required="true" type="text" placeholder="Nom épreuve" required class="validate">
+                <label for="nom" data-error="Champ obligatoire"></label>
+            </div>
+            <div class="input-field span-5 offset-2">
+                <p>Date de l'épreuve</p>
+                <input id="date" name="date" type="date" placeholder="06/12/2016" required class="validate datepicker">
+                <label for="date" data-error="Champ obligatoire"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field span-5">
+                <p>Nombre de participant maximum :</p>
+                <input id="nbParticipant" name="nbParticipant" type="number" placeholder="5555" required class="validate">
+                <label for="nbParticipant" data-error="Champ obligatoire"></label>
+            </div>
+            <div class="input-field span-5 offset-2">
+                <p>Prix :</p>
+                <input id="prix" name="prix" type="number" placeholder="10" required class="validate">
+                <label for="prix" data-error="Champ obligatoire"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col span-12">
+                <p>ajouter une photo :</p>
+                <div class="file-field input-field">
+                    <div class="btn teal">
+                        <span>A pic !</span>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input required="" class="file-path validate" type="text" name="path_img">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="btn teal ajoutEpreuve offset-7">Ajouter une épreuve</p>
+        <div class="row">
+            <button class="btn waves-effect waves-light teal" type="submit" name="action"  value="subInscription">Créer les épreuves
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
+</div>
