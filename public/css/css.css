@@ -33,3 +33,10 @@
 #footer_row{
     margin-bottom: 0;
 }
+
+#footer {
+  position: relative;
+  bottom: 0;
+  max-height: 200px;
+  width: 100%;
+}
