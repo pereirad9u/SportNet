@@ -90,11 +90,14 @@ $container['App\Controllers\UserController'] = function ($c) {
     );
 };
 
-$container['App\Controllers\UserController'] = function ($c) {
-    return new App\Controllers\EpreuveController(
+
+$container['App\Controllers\EventController'] = function ($c) {
+    return new App\Controllers\EventController(
         $c
     );
 };
+
+
 # -----------------------------------------------------------------------------
 # Factories Models
 # -----------------------------------------------------------------------------
