@@ -29,11 +29,15 @@ final class UserController
 		return $this->view->render($response, 'users.twig', ["data" => $users]);
     }
 
-    public function signup(Request $request, Response $response, $args){
-      return $this->view->render($response,'signup.twig', array('errors' => $errors));
+    public function signupOrg(Request $request, Response $response, $args){
+      return $this->view->render($response,'signuporg.twig', array('errors' => $errors));
     }
 
-    public function addMember(Request $request, Response $response, $args) {
+    public function signupUser(Request $request, Response $response, $args){
+      return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+    }
+
+    public function addMemberOrg(Request $request, Response $response, $args) {
         if (isset($_POST['action']) && ($_POST['action'] == 'subInscription')) {
             if (isset($_POST['name']) && isset($_POST['firstname']) && isset($_POST['association']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['website']) && isset($_POST['tel']) )  {
 
@@ -63,9 +67,6 @@ final class UserController
                     if (sizeof ( $emailVerif ) != 0) {
                         array_push ( $errors, "Un compte a déjà été créé avec cette adresse email ou ce pseudo" );
                     }
-                }
-                if ($adress != filter_var ( $adress, FILTER_SANITIZE_STRING )) {
-                    array_push ( $errors, "Adresse invalide, merci de corriger" );
                 }
                 if ($website != filter_var ( $website, FILTER_SANITIZE_STRING )) {
                     array_push ( $errors, "URL invalide, merci de corriger" );
@@ -102,7 +103,7 @@ final class UserController
 
                 }
                 else {
-                    return $this->view->render($response,'signup.twig', array('errors' => $errors));
+                    return $this->view->render($response,'signuporg.twig', array('errors' => $errors));
 
                 }
             }else{
@@ -115,11 +116,85 @@ final class UserController
         }
     }
 
-    public function loginPage(Request $request, Response $response, $args) {
-        return $this->view->render($response, 'login.twig');
+    public function addMemberUser(Request $request, Response $response, $args) {
+        if (isset($_POST['action']) && ($_POST['action'] == 'subInscription')) {
+            if (isset($_POST['name']) && isset($_POST['firstname']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['tel']) )  {
+
+                $nom = $_POST['name'];
+                $prenom = $_POST['firstname'];
+                $email = $_POST['email'];
+                $pass = $_POST['password'];
+                $tel = $_POST['tel'];
+
+                $errors = array ();
+
+                if ($nom != filter_var ( $nom, FILTER_SANITIZE_STRING )) {
+                    array_push ( $errors, "Nom invalide, merci de corriger" );
+                }
+                if ($prenom != filter_var ( $prenom, FILTER_SANITIZE_STRING )) {
+                    array_push ( $errors, "Prenom invalide, merci de corriger" );
+                }
+                if ($email != filter_var ( $email, FILTER_VALIDATE_EMAIL )) {
+                    array_push ( $errors, "Adresse email invalide, merci de corriger" );
+                } else {
+                    $emailVerif = \App\Models\User::where ( 'email', $email )->get ();
+                    if (sizeof ( $emailVerif ) != 0) {
+                        array_push ( $errors, "Un compte a déjà été créé avec cette adresse email ou ce pseudo" );
+                    }
+                }
+                if ($tel != filter_var ( $tel, FILTER_SANITIZE_STRING )) {
+                    array_push ( $errors, "Numero de tel invalide, merci de corriger" );
+                }
+                if ($pass != filter_var ( $pass, FILTER_SANITIZE_STRING )) {
+                    array_push ( $errors, "Mot de passe invalide, merci de corriger" );
+                }
+
+
+                if (sizeof ( $errors ) == 0) {
+                    $nom = filter_var ( $nom, FILTER_SANITIZE_STRING );
+                    $prenom = filter_var ( $prenom, FILTER_SANITIZE_STRING );
+                    $email = filter_var ( $email, FILTER_SANITIZE_EMAIL );
+                    $tel = filter_var($tel, FILTER_SANITIZE_STRING );
+                    $website = filter_var($website, FILTER_SANITIZE_STRING );
+                    $asso = filter_var($asso, FILTER_SANITIZE_STRING );
+                    $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
+                        'cost' => 12,
+                    ) );
+                    $m = new \App\Models\User();
+                    $m->id = uniqid();
+                    $m->nom = $nom;
+                    $m->prenom = $prenom;
+                    $m->email = $email;
+                    $m->siteweb = $website;
+                    $m->telephone = $tel;
+                    $m->motdepasse = $pass;
+                    $m->save ();
+                    return $response->withRedirect($this->router->pathFor('homepage'));
+
+                }
+                else {
+                    return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+
+                }
+            }else{
+                return $response->withRedirect($this->router->pathFor('homepage'));
+
+            }
+        }else{
+            return $response->withRedirect($this->router->pathFor('homepage'));
+
+        }
     }
 
-    public function login(Request $request, Response $response, $args) {
+    public function loginPageOrg(Request $request, Response $response, $args) {
+        return $this->view->render($response, 'loginorg.twig');
+    }
+
+    public function loginPageUser(Request $request, Response $response, $args) {
+        return $this->view->render($response, 'loginuser.twig');
+    }
+
+    public function loginOrg(Request $request, Response $response, $args) {
         if(isset($_POST['action']) && $_POST['action'] == 'login') {
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
@@ -131,19 +206,47 @@ final class UserController
                         return $response->withRedirect($this->router->pathFor('homepage'));
                     }
                     else {
-                        $this->view->render($response, 'login.twig', array('errors' => "error"));
+                        $this->view->render($response, 'loginorg.twig', array('errors' => "error"));
                     }
                 }
                 else {
-                    $this->view->render($response, 'login.twig', array('errors' => "error"));
+                    $this->view->render($response, 'loginorg.twig', array('errors' => "error"));
                 }
             }
             else {
-                $this->view->render($response, 'login.twig', array('errors' => "error"));
+                $this->view->render($response, 'loginorg.twig', array('errors' => "error"));
             }
         }
         else {
-            $this->view->render($response, 'login.twig', array('errors' => "error"));
+            $this->view->render($response, 'loginorg.twig', array('errors' => "error"));
+        }
+    }
+
+    public function loginUser(Request $request, Response $response, $args) {
+        if(isset($_POST['action']) && $_POST['action'] == 'login') {
+            if(isset($_POST["email"]) && isset($_POST["password"])) {
+                $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+                $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+                $m = User::where("email", $email)->get()->first();
+                if(isset($m->uniqid)) {
+                    if (password_verify($password, $m->password)) {
+                        $_SESSION["uniqid"] = $m->uniqid;
+                        return $response->withRedirect($this->router->pathFor('homepage'));
+                    }
+                    else {
+                        $this->view->render($response, 'loginuser.twig', array('errors' => "error"));
+                    }
+                }
+                else {
+                    $this->view->render($response, 'loginuser.twig', array('errors' => "error"));
+                }
+            }
+            else {
+                $this->view->render($response, 'loginuser.twig', array('errors' => "error"));
+            }
+        }
+        else {
+            $this->view->render($response, 'loginuser.twig', array('errors' => "error"));
         }
     }
 
