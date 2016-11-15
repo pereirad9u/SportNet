@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Events extends Model
 {
-    protected $table = "event";
+    protected $table = "events";
     protected $primaryKey = "id";
 
     public $timestamps = false;

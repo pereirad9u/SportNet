@@ -1,0 +1,55 @@
+
+
+
+<div class="container">
+
+    <h5>Votre Evenement :</h5>
+
+    <form method="post" >
+        <div class="row">
+            <div class="input-field col s6">
+                <label> Nom de l'évènement :</label><br>
+                <input type="text" name="name" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label> Date de début :</label><br>
+                <input id="dateDebut" name="dateDebut" type="date" placeholder="MM/DD/YYYY" required class="validate datepicker">
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label for="dateFin"> Date de fin :</label><br>
+                <input type="date" id="dateFin" name="dateFin" placeholder="MM/DD/YYYY" required class="datepicker">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label for="lieu"> Lieu :</label><br>
+                <input type="text" id="lieu" name="lieu" required class="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label for="description"> Description :</label><br><br>
+                <textarea type="text" id="description" name="description" required rows="3" class="materialize-textarea"></textarea>
+            </div>
+        </div>
+
+
+        <button class="btn waves-effect waves-light teal" type="submit" name="action"  value="createEvent">Ajouter vos épreuves
+            <i class="material-icons right">send</i>
+        </button>
+
+
+    </form>
+
+
+</div>

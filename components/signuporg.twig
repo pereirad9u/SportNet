@@ -1,0 +1,76 @@
+{%  if errors != "" %}
+    {% for error in errors %}
+    <div class="row red-text center">
+        <p>{{ error }}</p>
+    </div>
+    {% endfor %}
+{% endif %}
+
+    <div class="container">
+        <form method="post" id='signup' name="signuporg" class="span-10 offset-1">
+
+            <div class="row">
+                <div class="input-field span-5">
+                    <input id="firstname" name="firstname" aria-required="true" type="text" placeholder="First Name" required class="validate">
+                    <label for="firstname" data-error="Champ obligatoire"></label>
+                </div>
+                <div class="input-field span-5">
+                    <input id="name" name="name" type="text" placeholder="Name" required="" class="validate">
+                    <label for="name" data-error="Champ obligatoire"></label>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="association" name="association" type="text" placeholder="nom de l'association" required class="validate">
+                    <label for="association" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="email" name="email" type="email" placeholder="email@email.com" required class="validate">
+                    <label for="email" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="website" name="website" type="url" placeholder="http://www.website.com" required class="validate">
+                    <label for="website" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="tel" name="tel" type="tel" placeholder="phone number" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" required class="validate">
+                    <label for="tel" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="password" name="password" type="password" placeholder="password" required class="validate">
+                    <label for="password" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field span-6">
+                    <input id="passwordValidate" name="passwordValidate" type="password" placeholder="password validate"  required class="validate">
+                    <label for="passwordValidate" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
+
+            <div class="row">
+
+                    <button class="btn waves-effect waves-light offset-2" type="submit" name="action"  value="subInscription">Sign up !
+                        <i class="material-icons right">send</i>
+                    </button>
+            </div>
+
+        </form>
+
+    </div>
+<script>
+    $('#signup').validate() ;
+</script>

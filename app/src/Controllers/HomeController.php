@@ -16,7 +16,7 @@ final class HomeController
     {
         $this->view = $view;
         $this->logger = $logger;
-        $this->model = $user;
+        $this->user = $user;
     }
     public function dispatch(Request $request,Response $response, $args){
         if(isset($_SESSION['uniqid']) && isset($_SESSION['type'])){
