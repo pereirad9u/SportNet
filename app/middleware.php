@@ -13,9 +13,15 @@ $app->add(function ($request, $response, $next) {
 
 $app->add(function ($request, $response, $next) {
     if (!(starts_with($request->getUri()->getPath(),'/ajax'))){
-        if (isset($_SESSION['uniqid']) && isset($_SESSION['test'])){
-            $u = User::where('uniqid',$_SESSION['uniqid'])->get()->first();
-            $this->view->render($response,'header.twig',['user'=>$u]);
+        if (isset($_SESSION['uniqid']) && isset($_SESSION['type'])){
+            if ($_SESSION['typre'] == 'org'){
+                $o = \App\Models\Organisers::find($_SESSION['uniqid']);
+                $this->view->render($response,'header.twig',['org'=>$o]);
+            }else{
+                $u = User::find($_SESSION['uniqid']);
+                $this->view->render($response,'header.twig',['user'=>$u]);
+            }
+
         }else{
             $this->view->render($response,'header.twig');
         }
