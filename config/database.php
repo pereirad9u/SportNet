@@ -7,9 +7,9 @@ $capsule = new Capsule;
 $capsule->addConnection([
     'driver'    => 'mysql',
     'host'      => 'localhost',
-    'database'  => 'boilerplate_slim',
+    'database'  => 'sportnet',
     'username'  => 'root',
-    'password'  => '',
+    'password'  => 'alexandre',
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
