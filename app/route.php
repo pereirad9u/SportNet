@@ -8,12 +8,20 @@ $app->get('/', 'App\Controllers\UserController:dispatch')->setName('homepage');
 
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
 
-$app->get('/signup', 'App\Controllers\UserController:signup')->setName('signup');
+$app->get('/signuporg', 'App\Controllers\UserController:signupOrg')->setName('signuporg');
 
-$app->post('/signup', 'App\Controllers\UserController:addMember');
+$app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 
-$app->get('/login', 'App\Controllers\UserController:loginPage')->setName('login');
+$app->get('/loginorg', 'App\Controllers\UserController:loginPageOrg')->setName('loginorg');
 
-$app->post('/login', 'App\Controllers\UserController:login');
+$app->post('/loginorg', 'App\Controllers\UserController:loginOrg');
+
+$app->get('/signupuser', 'App\Controllers\UserController:signupUser')->setName('signupuser');
+
+$app->post('/signupuser', 'App\Controllers\UserController:addMemberUser');
+
+$app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName('loginuser');
+
+$app->post('/loginuser', 'App\Controllers\UserController:loginUser');
 
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
