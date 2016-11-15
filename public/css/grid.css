@@ -1,0 +1,133 @@
+.span-1 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 6.33333%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-2 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 14.66667%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-3 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 23%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-4 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 31.33333%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-5 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 39.66667%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-6 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 48%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-7 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 56.33333%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-8 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 64.66667%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-9 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 73%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-10 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 81.33333%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-11 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 89.66667%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.span-12 {
+  box-sizing: border-box;
+  float: left;
+  height: auto;
+  width: 98%;
+  margin-left: 2%;
+  margin-bottom: 20px; }
+
+.offset-1 {
+  margin-left: 10.33333%; }
+
+.offset-2 {
+  margin-left: 18.66667%; }
+
+.offset-3 {
+  margin-left: 27%; }
+
+.offset-4 {
+  margin-left: 35.33333%; }
+
+.offset-5 {
+  margin-left: 43.66667%; }
+
+.offset-6 {
+  margin-left: 52%; }
+
+.offset-7 {
+  margin-left: 60.33333%; }
+
+.offset-8 {
+  margin-left: 68.66667%; }
+
+.offset-9 {
+  margin-left: 77%; }
+
+.offset-10 {
+  margin-left: 85.33333%; }
+
+.offset-11 {
+  margin-left: 93.66667%; }
+
+.offset-12 {
+  margin-left: 102%; }
+
+/*# sourceMappingURL=grid.css.map */
