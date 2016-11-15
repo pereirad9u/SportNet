@@ -8,7 +8,8 @@ $app->get('/', 'App\Controllers\UserController:dispatch')->setName('homepage');
 
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
 
-$app->get('/createEpreuve/{id}', 'App\Controllers\UserController:creationEpreuve')->setName('createEpreuve');
+$app->get('/createEpreuve/{id}', 'App\Controllers\EpreuveController:creationEpreuve')->setName('createEpreuve');
+$app->post('/createEpreuve/{id}', 'App\Controllers\EpreuveController:saveEpreuve');
 
 $app->get('/signuporg', 'App\Controllers\UserController:signupOrg')->setName('signuporg');
 
