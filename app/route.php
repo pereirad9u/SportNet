@@ -10,6 +10,11 @@ $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpag
 
 $app->get('/signuporg', 'App\Controllers\UserController:signupOrg')->setName('signuporg');
 
+$app->get('/createevent','App\Controllers\EventController:formEvent')->setName('formulaire');
+
+$app->post('/createevent','App\Controllers\EventController:saveEvent');
+
+
 $app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 
 $app->get('/loginorg', 'App\Controllers\UserController:loginPageOrg')->setName('loginorg');
@@ -25,3 +30,4 @@ $app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName
 $app->post('/loginuser', 'App\Controllers\UserController:loginUser');
 
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
+
