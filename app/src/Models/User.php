@@ -13,7 +13,7 @@ class User extends Model
     public $incrementing = false;
 
     function epreuves(){
-        $this->belongsToMany('App\Models\Epreuve');
+        $this->belongsToMany('App\Models\Epreuves');
     }
 
 }
