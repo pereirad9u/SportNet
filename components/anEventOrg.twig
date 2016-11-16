@@ -38,7 +38,7 @@
             <div>
                 <p> Nombre de participants : {{ event.nb_participants }}</p>
                 <p> Les inscriptions sont actuellement : {{ event.etat }}</p>
-                
+
                 <div>
                     {% for epreuve in tabEpreuve %}
                         <div>
@@ -74,6 +74,22 @@
         <button class="btn waves-effect waves-light teal " type="submit" name="action"  value="postresults">Fin de l'évènement
             <i class="material-icons right">send</i>
         </button>
+    </div>
+
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>SportNet</h4>
+        <p>
+        Félicitation, vous venez de créer votre Evènement!
+        Voici l'URL de votre Evènement pour les potentiels participants :
+        <a href="http://{{ url }}">{{ url }}</a>
+        Vous pouvez désormais partager cette URL sur votre site web!
+        Ils vous sera également possible d'y avoir accès dans votre profil.
+        </p>
+        </div>
+      <div class="modal-footer">
+        <a class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
     </div>
 
     </form>
