@@ -12,7 +12,7 @@ namespace App\Controllers;
 use App\Models\Epreuves;
 use App\Models\Events;
 use App\Models\Results;
-use App\Models\User;
+use App\Models\Users;
 use App\Models\Organisers;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
@@ -128,7 +128,7 @@ final class EventController
         $datas[0] = ['nom', 'prenom', 'classement', 'temps'];
         foreach ($resultats as $r) {
             $d=[];
-            $u = User::find($r->id_utilisateur);
+            $u = Users::find($r->id_utilisateur);
             array_push($d, $u->nom);
             array_push($d, $u->prenom);
             array_push($d, $r->classement);

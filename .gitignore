@@ -15,5 +15,5 @@ bootstrap/cache/
 .rocketeer/
 
 .idea/
-config/
+config/*
 storage/
