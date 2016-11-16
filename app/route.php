@@ -36,6 +36,8 @@ $app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName
 
 $app->post('/loginuser', 'App\Controllers\UserController:loginUser');
 
+$app->get('/participants/{id}', 'App\Controllers\EpreuveController:participants')->setName('participants');
+
 $app->post('/postresults', 'App\Controllers\UserController:upload_resultat');
 
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
