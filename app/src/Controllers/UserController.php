@@ -67,7 +67,7 @@ final class UserController
                 if ($email != filter_var ( $email, FILTER_VALIDATE_EMAIL )) {
                     array_push ( $errors, "Adresse email invalide, merci de corriger" );
                 } else {
-                    $emailVerif = \App\Models\Users::where ( 'email', $email )->get ();
+                    $emailVerif = \App\Models\Organisers::where ( 'email', $email )->get ();
                     if (sizeof ( $emailVerif ) != 0) {
                         array_push ( $errors, "Un compte a déjà été créé avec cette adresse email ou ce pseudo" );
                     }
