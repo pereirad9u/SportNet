@@ -1,0 +1,47 @@
+
+
+
+<div class="container span-10 offset-1">
+    <div class="row bot">
+        <div class="center">
+            <h3> {{ event.name }}</h3>
+        </div>
+        <div>
+            <p>Slider</p>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div>
+            <p>{{ event.description }}</p>
+        </div>
+        <div>
+            <p>{{ organiser.nom }}  {{ organiser.prenom }}</p>
+            <p>Telephone : {{ organiser.telephone }} </p>
+            <p>Email : {{  organiser.email }}</p>
+            <p>Site : {{  organiser.siteweb }}</p>
+            {%if organiser.association is defined %}
+            <p>Site : {{  organiser.siteweb }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for epreuve in tabEpreuve%}
+        <div>
+            <h6> {{ epreuve.nom }}</h6>
+            <p>{{ epreuve.description }} </p>
+            <p>Discipline : {{ epreuve.discipline }} </p>
+            <p>Date : {{ epreuve.date }} </p>
+            <p>Nombre de participant maximum : {{ epreuve.nb_participant_max }} </p>
+            <p>Nombre de participant  : {{ epreuve.nb_participant }} </p>
+            <p>Prix : {{ epreuve.prix }} </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>

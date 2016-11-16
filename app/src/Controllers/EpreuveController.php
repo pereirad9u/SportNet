@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 use App\Models\Epreuves;
+use App\Models\Events;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -37,8 +38,8 @@ class EpreuveController
 
     public function saveEpreuve(Request $request, Response $response, $args){
 
-
-        $nom = filter_var ( $_POST['name'], FILTER_SANITIZE_STRING );
+        $nbEpreuve = $_POST['nbEpreuve'];
+        $nom = filter_var ( $_POST['nom'], FILTER_SANITIZE_STRING );
         $date = $this->modifDate($_POST['date']);
         $description = filter_var ( $_POST['description'], FILTER_SANITIZE_STRING );
         $nbParticipant = filter_var ( $_POST['nbParticipant'], FILTER_SANITIZE_NUMBER_INT );
@@ -50,7 +51,7 @@ class EpreuveController
             $extension_upload = strtolower(substr(strrchr($_FILES['image']['name'], '.'), 1));
             if (in_array($extension_upload, $extensions_valides)) {
                 if ($_FILES['image']['size'] <= 67108864) {
-                    $n = $_FILES['image']['name'];
+                    $n = uniqid().'.'.$extension_upload;
                     $nom_pic = "images/$n";
                     $pic_r = $_FILES['image']['tmp_name'];
                     $this->resize_image($pic_r, null, 200, 200);
@@ -68,6 +69,7 @@ class EpreuveController
         }
 
         $epreuve = new Epreuves();
+        $epreuve->id = uniqid();
         $epreuve->nom = $nom;
         $epreuve->date = $date;
         $epreuve->description = $description;
@@ -80,6 +82,57 @@ class EpreuveController
         $epreuve->image = $nom_pic;
         $epreuve->save();
 
+        for ($i=1; $i<=$nbEpreuve;$i++){
+            $num = $i+1;
+            $nom = filter_var ( $_POST['nom'.$num], FILTER_SANITIZE_STRING );
+            $date = $this->modifDate($_POST['date'.$num]);
+            $description = filter_var ( $_POST['description'.$num], FILTER_SANITIZE_STRING );
+            $nbParticipant = filter_var ( $_POST['nbParticipant'.$num], FILTER_SANITIZE_NUMBER_INT );
+            $prix = filter_var ( $_POST['nbParticipant'.$num], FILTER_SANITIZE_NUMBER_INT );
+            $discipline = filter_var ( $_POST['discipline'.$num], FILTER_SANITIZE_STRING );
+
+            if ($_FILES['image'.$num]['name'] != "") {
+                $extensions_valides = array('jpg', 'jpeg', 'gif', 'png');
+                $extension_upload = strtolower(substr(strrchr($_FILES['image'.$num]['name'], '.'), 1));
+                if (in_array($extension_upload, $extensions_valides)) {
+                    if ($_FILES['image'.$num]['size'] <= 67108864) {
+                        $n = uniqid().'.'.$extension_upload;
+                        $nom_pic = "images/$n";
+                        $pic_r = $_FILES['image'.$num]['tmp_name'];
+                        $this->resize_image($pic_r, null, 200, 200);
+                        $resultat = move_uploaded_file($pic_r, $nom_pic);
+                        if ($resultat) {
+                        } else {
+                            return $this->view->render($response, 'creationEpreuve.twig', ['erreur' => 'Erreur lors de l\'envoye du fichier, merci de recommencer.']);
+                        }
+                    } else {
+                        return $this->view->render($response, 'creationEpreuve.twig', ['erreur' => 'Poids du fichier trop important.']);
+                    }
+                } else {
+                    return $this->view->render($response, 'creationEpreuve.twig', ['erreur' => 'Format de fichier non pris en compte, utiliser un .jpg .png ou .gif.']);
+                }
+            }
+
+            $epreuve = new Epreuves();
+            $epreuve->id = uniqid();
+            $epreuve->nom = $nom;
+            $epreuve->date = $date;
+            $epreuve->description = $description;
+            $epreuve->nb_participants_max = $nbParticipant;
+            $epreuve->nb_participants = 0;
+            $epreuve->prix = $prix;
+            $epreuve->inscription = 1;
+            $epreuve->id_evenement = $args['id'];
+            $epreuve->discipline = $discipline;
+            $epreuve->image = $nom_pic;
+            $epreuve->save();
+        }
+
+        $event = Events::find($args['id']);
+        $event->etat = "ouvertes";
+        $event->save();
+        $url = $this->router->pathfor('anEvent',['id' =>$args['id']]);
+        return $response->withStatus(302)->withHeader('Location',$url);
     }
 
     private function modifDate($date) {
