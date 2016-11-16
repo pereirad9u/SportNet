@@ -9,7 +9,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Epreuves;
 use App\Models\Events;
+use App\Models\Organisers;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -60,6 +62,18 @@ final class EventController
 
     }
 
+    public function anEventOrg(Request $request, Response $response,$args){
+        $event = Events::find($args['id']);
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id);
+        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
+    }
+
+    public function anEvent(Request $request, Response $response,$args){
+        $event = Events::find($args['id']);
+        $organiser = Organisers::find($event->id_organisateur);
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id);
+        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+    }
 
     private function modifDate($date) {
         $jm = explode(' ', $date);

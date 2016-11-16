@@ -17,6 +17,10 @@ $app->get('/createevent','App\Controllers\EventController:formEvent')->setName('
 
 $app->post('/createevent','App\Controllers\EventController:saveEvent');
 
+$app->get('/anEventOrg/{id}','App\Controllers\EventController:anEventOrg')->setName('anEventOrg');
+
+$app->get('/anevent/{id}','App\Controllers\EventController:anEvent')->setName('anEvent');
+
 $app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 
 $app->get('/loginorg', 'App\Controllers\UserController:loginPageOrg')->setName('loginorg');
