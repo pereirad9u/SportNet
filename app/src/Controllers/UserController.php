@@ -257,4 +257,30 @@ final class UserController
         unset($_SESSION['uniqid']);
         return $response->withRedirect($this->router->pathFor('homepage'));
     }
+
+    public function upload_resultat(Request $request, Response $response, $args){
+      if (isset($_FILES['res']) && $_POST['res_id']){
+        for ($i=0; $i<=count($_FILES['res']['name']); $i++){
+          $csv = new SplFileObject($_FILES['res']['name'][$i], 'r');
+          $csv->setFlags(SplFileObject::READ_CSV);
+
+          foreach($csv as $ligne)
+          {
+            $num_doss = $ligne[0];
+            $classement = $ligne[1];
+            $temps = $ligne[2];
+            $id_user = \App\Models\UserEpreuve::where('id_epreuves', '=', $_POST['res_id'][$i])->where('num_dossard', '=', $num_doss)->first()->id_users;
+
+            $res = new \App\Models\Results();
+            $res->id=uniqid();
+            $res->classement = $classement;
+            $res->temps = $temps;
+            $res->id_utilisateur = $id_user;
+            $res->id_epreuve = $_POST['res_id'][$i];
+            $res->save();
+          }
+        }
+        return $response->withRedirect($this->router->pathFor('homepage'));
+      }
+    }
 }

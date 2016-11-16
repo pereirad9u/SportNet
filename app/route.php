@@ -35,6 +35,8 @@ $app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName
 
 $app->post('/loginuser', 'App\Controllers\UserController:loginUser');
 
+$app->post('/postresults', 'App\Controllers\UserController:upload_resultat');
+
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
 
 $app->get('/resultat/{id}', 'App\Controllers\EventController:affichageResultat');
