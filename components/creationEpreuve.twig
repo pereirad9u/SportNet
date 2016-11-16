@@ -1,3 +1,11 @@
+
+{%if erreur is defined %}
+    <div class="row red-text center">
+        <p> {{  erreur }}</p>
+    </div>
+
+{% endif %}
+
 <div class="container">
 
     <form class="span-8 offset-2" method="post" id='createEpreuve' name="createEpreuve" enctype="multipart/form-data">
@@ -18,20 +26,25 @@
             <div class="row">
                 <div class="span-12">
                     <p>Description</p>
-                    <textarea class="materialize-textarea" name="name" required></textarea>
+                    <textarea class="materialize-textarea" name="description" required></textarea>
                 </div>
-
             </div>
-
+            <div class="row">
+                <div class="input-field span-5">
+                    <p>Nom de la discipline</p>
+                    <input id="discipline" name="discipline" aria-required="true" type="text" placeholder="discipline" required class="validate">
+                    <label for="discipline" data-error="Champ obligatoire"></label>
+                </div>
+            </div>
             <div class="row">
                 <div class="input-field span-5">
                     <p>Nombre de participant maximum :</p>
-                    <input id="nbParticipant" name="nbParticipant" type="number" placeholder="5555" required class="validate">
+                    <input id="nbParticipant" name="nbParticipant" type="number" min="1" placeholder="5555" required class="validate">
                     <label for="nbParticipant" data-error="Champ obligatoire"></label>
                 </div>
                 <div class="input-field span-5 offset-2">
                     <p>Prix :</p>
-                    <input id="prix" name="prix" type="number" placeholder="10" required class="validate">
+                    <input id="prix" name="prix" type="number" step="0.01" min="0" placeholder="10" required class="validate">
                     <label for="prix" data-error="Champ obligatoire"></label>
                 </div>
             </div>
@@ -54,10 +67,11 @@
             <a class="btn teal ajoutEpreuve "><i class="material-icons left">add</i>Ajouter une épreuve</a>
         </div>
         <div class="row center">
-            <button class="btn waves-effect waves-light teal " type="submit" name="action"  value="subInscription">Créer les épreuves
+            <button class="btn waves-effect waves-light teal " type="submit" name="action"  value="createepreuve">Créer les épreuves
                 <i class="material-icons right">send</i>
             </button>
         </div>
+        <input id="nbEpreuve" name="nbEpreuve" type="hidden" value="">
     </form>
 </div>
 

@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="card-panel">
+        <table class="bordered">
+            <thead>
+            <tr>
+        {% for data in datas %}
+            {% for d in data if d in datas[0]  %}
+                    <th>{{ d }}</th>
+            {% endfor %}
+        {% endfor %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for data in datas %}
+                <tr>
+                {% for d in data if d not in datas[0] and data != null  %}
+                    <td>{{ d }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
