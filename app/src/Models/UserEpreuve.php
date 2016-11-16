@@ -4,16 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class UserEpreuve extends Model
 {
-    protected $table = "users";
+    protected $table = "users_epreuves";
     protected $primaryKey = "id";
 
     public $timestamps = false;
     public $incrementing = false;
 
-    function epreuves(){
-        $this->belongsToMany('App\Models\Epreuve');
-    }
 
 }

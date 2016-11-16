@@ -260,17 +260,50 @@ final class UserController
         return $response->withRedirect($this->router->pathFor('homepage'));
     }
 
-    public function profil(Request $request, Response $response, $args) {
+
+    public function profil(Request $request, Response $response, $args)
+    {
         $u = User::find($args['id']);
         if ($u != null) {
             $org = false;
             $epreuve = Epreuves::where
-        }
-        else {
+        } else {
             $u = Organisers::find($args['id']);
             $org = true;
         }
 
-        $this->view->render($response, 'profil.twig', array('user'=>$u, 'isOrg' => $org));
+        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org));
+    }
+
+    public function upload_resultat(Request $request, Response $response, $args){
+      //die(var_dump($_FILES['res']));
+      if (isset($_FILES['res']) && $_POST['res_id']){
+        for ($i=0; $i<count($_FILES['res']['tmp_name']); $i++){
+          $csv = new \SplFileObject($_FILES['res']['tmp_name'][$i], 'r');
+          $csv->setFlags(\SplFileObject::READ_CSV);
+          $csv->setCsvControl(';', '"', '"');
+          foreach($csv as $ligne)
+          {
+            if ($ligne[0] != null && $ligne[1] != null && $ligne[2] != null){
+              $num_doss = $ligne[0];
+              $classement = intval($ligne[1]);
+              $temps = $ligne[2];
+              $id_user = \App\Models\UserEpreuve::where('id_epreuves', '=', $_POST['res_id'][$i])->where('num_dossard', '=', $num_doss)->first()->id_users;
+              if (\App\Models\Results::where('id_utilisateur', '=', $id_user)->where('id_epreuve','=',$_POST['res_id'][$i])->count() == 0){
+                $res = new \App\Models\Results();
+                $res->id=uniqid();
+                $res->classement = $classement;
+                $res->temps = $temps;
+                $res->id_utilisateur = $id_user;
+                $res->id_epreuve = $_POST['res_id'][$i];
+                $res->save();
+              }else{
+                $res = \App\Models\Results::where('id_utilisateur', '=', $id_user)->where('id_epreuve','=',$_POST['res_id'][$i])->update(['classement' => $classement, 'temps' => $temps]);
+              }
+            }
+          }
+        }
+        return $response->withRedirect($this->router->pathFor('homepage'));
+      }
     }
 }

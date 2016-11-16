@@ -20,7 +20,7 @@ $app->post('/createevent','App\Controllers\EventController:saveEvent');
 
 $app->get('/anEventOrg/{id}','App\Controllers\EventController:anEventOrg')->setName('anEventOrg');
 
-$app->get('/anevent/{id}','App\Controllers\EventController:anEvent')->setName('anEvent');
+$app->get('/anEvent/{id}','App\Controllers\EventController:anEvent')->setName('anEvent');
 
 $app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 
@@ -35,6 +35,8 @@ $app->post('/signupuser', 'App\Controllers\UserController:addMemberUser');
 $app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName('loginuser');
 
 $app->post('/loginuser', 'App\Controllers\UserController:loginUser');
+
+$app->post('/postresults', 'App\Controllers\UserController:upload_resultat');
 
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
 

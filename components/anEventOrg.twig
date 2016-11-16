@@ -1,50 +1,78 @@
 
+<div class="container  ">
 
-<div class="container span-10 offset-1">
+  <form method="post" action="/postresults" enctype="multipart/form-data">
     <div class="row">
-        <div class="center">
-            <h3> {{ event.name }}</h3>
-        </div>
 
 
-    </div>
-
-    <div class="row">
-        <div>
-            <p>{{ event.description }}</p>
-            <p>Du :{{ event.date_debut }} au : {{ event.date_fin }}</p>
-            <p>Lieu : {{ event.lieu }} </p>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <h5>Epreuves :</h5>
-        {% for epreuve in tabEpreuve%}
-            <div>
-                <p>{{ epreuve.nom }}</p>
+        <div class=" ">
+            <div class="center">
+                <h3> {{ event.nom }}</h3>
             </div>
 
-        {% endfor %}
-    </div>
 
-    <div class="row">
-        <div>
-            <p> Nombre de participants : {{ event.nb_participant }}</p>
-            <p> Les inscriptions sont actuellement : {{ event.etat }}</p>
-            <p> Vous pouvez désomais télécharger la liste des participants pour les différentes épreuves :</p>
         </div>
 
-        <div>
-            {% for epreuve in tabEpreuve%}
+        <div class="col s6">
+            <div>
+                <p>{{ event.description }}</p>
+                <p>Du :{{ event.date_debut }} au : {{ event.date_fin }}</p>
+                <p>Lieu : {{ event.lieu }} </p>
+            </div>
+        </div>
+
+
+        <div class="col s6">
+            <h5>Epreuves :</h5>
+            {% for epreuve in tabEpreuve %}
                 <div>
                     <p>{{ epreuve.nom }}</p>
-                    <button>Participant à l'épreuve</button>
-                    <button>ajouter les résultat de l'épreuve</button>
                 </div>
+
             {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="">
+            <div>
+                <p> Nombre de participants : {{ event.nb_participants }}</p>
+                <p> Les inscriptions sont actuellement : {{ event.etat }}</p>
+                <p> Vous pouvez désomais télécharger la liste des participants pour les différentes épreuves :</p>
+            </div>
+
+            <div>
+                {% for epreuve in tabEpreuve %}
+                    <div>
+                        <p>{{ epreuve.nom }}</p>
+
+
+                        <div class="file-field input-field">
+                            <div class="btn teal">
+                                <span>Ajouter les résultat de l'épreuve</span>
+                                <input type="file" name="res[]" accept=".csv">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input required="" class="file-path validate" type="text" name="path_file">
+                            </div>
+
+                            <input class="hiddendiv" value="{{epreuve.id}}" name="res_id[]">
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+
         </div>
 
     </div>
+
+    <div class="row center">
+        <button class="btn waves-effect waves-light teal " type="submit" name="action"  value="postresults">Fin de l'évènement
+            <i class="material-icons right">send</i>
+        </button>
+    </div>
+
+    </form>
 
 </div>
