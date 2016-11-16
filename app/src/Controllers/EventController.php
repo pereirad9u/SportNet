@@ -9,7 +9,11 @@
 
 namespace App\Controllers;
 
+use App\Models\Epreuves;
 use App\Models\Events;
+use App\Models\Results;
+use App\Models\User;
+use App\Models\Organisers;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -53,13 +57,25 @@ final class EventController
         $event->etat = "nonvalide";
 
         $event->save();
-        
+
         $url = $this->router->pathfor('createEpreuve',['id' =>$event->id]);
         return $response->withStatus(302)->withHeader('Location',$url);
 
 
     }
 
+    public function anEventOrg(Request $request, Response $response,$args){
+        $event = Events::find($args['id']);
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
+    }
+
+    public function anEvent(Request $request, Response $response,$args){
+        $event = Events::find($args['id']);
+        $organiser = Organisers::find($event->id_organisateur);
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id);
+        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+    }
 
     private function modifDate($date) {
         $jm = explode(' ', $date);
@@ -105,5 +121,20 @@ final class EventController
         return "$jm[2]-$m[0]-$jm[0]";
     }
 
+    public function affichageResultat(Request $request, Response $response,$args) {
+        $datas =[];
+        $resultats = Results::where('id_epreuve', $args{'id'})->get();
+        $datas[0] = ['nom', 'prenom', 'classement', 'temps'];
+        foreach ($resultats as $r) {
+            $d=[];
+            $u = User::find($r->id_utilisateur);
+            array_push($d, $u->nom);
+            array_push($d, $u->prenom);
+            array_push($d, $r->classement);
+            array_push($d, $r->temps);
+            array_push($datas, $d);
+        }
+        return $this->view->render($response,'resultEvent.twig', array('datas' => $datas));
+    }
 
 }
