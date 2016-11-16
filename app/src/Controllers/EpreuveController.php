@@ -54,7 +54,7 @@ class EpreuveController
                     $n = uniqid().'.'.$extension_upload;
                     $nom_pic = "images/$n";
                     $pic_r = $_FILES['image']['tmp_name'];
-                    $this->resize_image($pic_r, null, 600, 600);
+                    $this->resize_image($pic_r, null, 200, 200);
                     $resultat = move_uploaded_file($pic_r, $nom_pic);
                     if ($resultat) {
                     } else {
@@ -99,7 +99,7 @@ class EpreuveController
                         $n = uniqid().'.'.$extension_upload;
                         $nom_pic = "images/$n";
                         $pic_r = $_FILES['image'.$num]['tmp_name'];
-                        $this->resize_image($pic_r, null, 600, 600);
+                        $this->resize_image($pic_r, null, 200, 200);
                         $resultat = move_uploaded_file($pic_r, $nom_pic);
                         if ($resultat) {
                         } else {
