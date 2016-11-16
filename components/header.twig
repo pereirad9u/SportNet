@@ -18,8 +18,7 @@
 </head>
 
 <body>
-
-<ul id="dropdown1" class="dropdown-content ">
+<ul id="dropdown1" class="dropdown-content dropdown ">
     <li><a href="/profil" class="teal-text">Voir profil</a></li>
     <li class="divider teal"></li>
     <li><a href="/editprofil" class="teal-text">Editer profil</a></li>
@@ -27,12 +26,32 @@
     <li><a href="/logout" class="teal-text">Deconnexion</a></li>
 </ul>
 
-<ul id="dropdown2" class="dropdown-content ">
+<ul id="dropdown2" class="dropdown-content dropdown">
+    <li><a href="/profil" class="teal-text">Créer un évènement</a></li>
+    <li class="divider teal"></li>
+    <li><a href="/editprofil" class="teal-text">Gérer un évènement</a></li>
+</ul>
+
+<ul id="dropdown3" class="dropdown-content dropdown ">
     <li><a href="/profil" class="teal-text">Voir profil</a></li>
     <li class="divider teal"></li>
     <li><a href="/editprofil" class="teal-text">Editer profil</a></li>
     <li class="divider teal"></li>
     <li><a href="/logout" class="teal-text">Deconnexion</a></li>
+</ul>
+
+<ul id="dropdown5" class="dropdown-content dropdown">
+    <li><a href="/signupuser" class="teal-text">Participant</a></li>
+    <li class="divider teal"></li>
+    <li><a href="/signuporg" class="teal-text">Organisateur</a></li>
+
+</ul>
+
+<ul id="dropdown4" class="dropdown-content dropdown">
+    <li><a href="/loginuser" class="teal-text">Participant</a></li>
+    <li class="divider teal"></li>
+    <li><a href="/loginorg" class="teal-text">Organisateur</a></li>
+
 </ul>
 
 
@@ -43,11 +62,10 @@
     <li><a href="/signup">Inscription</a></li>
     {% else %}
     {% if org is defined %}
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ org.prenom }} {{ org.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
-        <li><a href="/add"><i class="material-icons right">add</i>Créer un évènement</a></li>
-        <li><a href="/manage"></a>Gérer mes évènement</li>
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown4">Connexion<i class="material-icons right">arrow_drop_down</i></a></li>
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown5">Inscription<i class="material-icons right">arrow_drop_down</i></a></li>
     {% else %}
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown3">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
 
     {% endif %}
     {% endif %}
@@ -61,15 +79,15 @@
         <ul id="nav-mobile" class="right valign-wrapper hide-on-med-and-down">
             <li><form action="/search"  style="margin-right: 5px" class="center-align" method="get"><input type="text"  placeholder="Recherche" name="recherche" id="recherche"></form></li>
             {% if user is null and  org is null%}
-                <li><a href="/login">Connexion</a></li>
-                <li><a href="/signup">Inscription</a></li>
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown4">Connexion<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown5">Inscription<i class="material-icons right">arrow_drop_down</i></a></li>
             {% else %}
                 {% if org is defined %}
                 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ org.prenom }} {{ org.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a href="/add"><i class="material-icons right">add</i>Créer un évènement</a></li>
-                <li><a href="/manage"></a>Gérer mes évènement</li>
-                    {% else %}
-                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown2">mes évènements<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% else %}
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown3">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
 
                 {% endif %}
             {% endif %}

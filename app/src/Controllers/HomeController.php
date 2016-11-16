@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -24,6 +25,8 @@ final class HomeController
                 $this->view->render($response,'hello_org.twig');
 
             }else{
+                $u = User::find($_SESSION['uniqid']);
+                $e = $u->epreuves;
                 $this->view->render($response,'hello_user.twig');
 
             }
