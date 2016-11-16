@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Epreuves;
 use App\Models\Organisers;
 use App\Models\User;
 
@@ -263,11 +264,13 @@ final class UserController
         $u = User::find($args['id']);
         if ($u != null) {
             $org = false;
+            $epreuve = Epreuves::where
         }
         else {
             $u = Organisers::find($args['id']);
             $org = true;
         }
+
         $this->view->render($response, 'profil.twig', array('user'=>$u, 'isOrg' => $org));
     }
 }
