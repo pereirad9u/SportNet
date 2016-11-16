@@ -55,6 +55,7 @@ final class EventController
         $event->lieu = $lieu;
         $event->description = $description;
         $event->etat = "nonvalide";
+        $event->id_organisateur = $_SESSION['uniqid'];
 
         $event->save();
 
@@ -73,8 +74,8 @@ final class EventController
     public function anEvent(Request $request, Response $response,$args){
         $event = Events::find($args['id']);
         $organiser = Organisers::find($event->id_organisateur);
-        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id);
-        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+        return $this->view->render($response,'anEvent.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
     }
 
     private function modifDate($date) {

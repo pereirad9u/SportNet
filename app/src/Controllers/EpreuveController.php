@@ -54,7 +54,7 @@ class EpreuveController
                     $n = uniqid().'.'.$extension_upload;
                     $nom_pic = "images/$n";
                     $pic_r = $_FILES['image']['tmp_name'];
-                    $this->resize_image($pic_r, null, 200, 200);
+                    $this->resize_image($pic_r, null, 600, 600);
                     $resultat = move_uploaded_file($pic_r, $nom_pic);
                     if ($resultat) {
                     } else {
@@ -99,7 +99,7 @@ class EpreuveController
                         $n = uniqid().'.'.$extension_upload;
                         $nom_pic = "images/$n";
                         $pic_r = $_FILES['image'.$num]['tmp_name'];
-                        $this->resize_image($pic_r, null, 200, 200);
+                        $this->resize_image($pic_r, null, 600, 600);
                         $resultat = move_uploaded_file($pic_r, $nom_pic);
                         if ($resultat) {
                         } else {
@@ -131,7 +131,7 @@ class EpreuveController
         $event = Events::find($args['id']);
         $event->etat = "ouvertes";
         $event->save();
-        $url = $this->router->pathfor('anEvent',['id' =>$args['id']]);
+        $url = $this->router->pathfor('anEventOrg',['id' =>$args['id']]);
         return $response->withStatus(302)->withHeader('Location',$url);
     }
 
