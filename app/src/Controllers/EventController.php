@@ -10,6 +10,8 @@
 namespace App\Controllers;
 
 use App\Models\Events;
+use App\Models\Results;
+use App\Models\User;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -105,5 +107,20 @@ final class EventController
         return "$jm[2]-$m[0]-$jm[0]";
     }
 
+    public function affichageResultat(Request $request, Response $response,$args) {
+        $datas =[];
+        $resultats = Results::where('id_epreuve', $args{'id'})->get();
+        $datas[0] = ['nom', 'prenom', 'classement', 'temps'];
+        foreach ($resultats as $r) {
+            $d=[];
+            $u = User::find($r->id_utilisateur);
+            array_push($d, $u->nom);
+            array_push($d, $u->prenom);
+            array_push($d, $r->classement);
+            array_push($d, $r->temps);
+            array_push($datas, $d);
+        }
+        return $this->view->render($response,'resultEvent.twig', array('datas' => $datas));
+    }
 
 }
