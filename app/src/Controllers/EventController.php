@@ -57,7 +57,7 @@ final class EventController
         $event->etat = "nonvalide";
 
         $event->save();
-        
+
         $url = $this->router->pathfor('createEpreuve',['id' =>$event->id]);
         return $response->withStatus(302)->withHeader('Location',$url);
 
@@ -66,7 +66,7 @@ final class EventController
 
     public function anEventOrg(Request $request, Response $response,$args){
         $event = Events::find($args['id']);
-        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id);
+        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
         return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
     }
 
