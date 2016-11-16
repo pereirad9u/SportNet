@@ -14,7 +14,7 @@ $app->add(function ($request, $response, $next) {
 $app->add(function ($request, $response, $next) {
     if (!(starts_with($request->getUri()->getPath(),'/ajax'))){
         if (isset($_SESSION['uniqid']) && isset($_SESSION['type'])){
-            if ($_SESSION['typre'] == 'org'){
+            if ($_SESSION['type'] == 'org'){
                 $o = \App\Models\Organisers::find($_SESSION['uniqid']);
                 $this->view->render($response,'header.twig',['org'=>$o]);
             }else{

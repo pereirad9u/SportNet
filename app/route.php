@@ -4,11 +4,11 @@
 	controller needs to be registered in dependency.php
 */
 
-$app->get('/', 'App\Controllers\UserController:dispatch')->setName('homepage');
+$app->get('/', 'App\Controllers\HomeController:dispatch')->setName('homepage');
 
 $app->get('/users', 'App\Controllers\UserController:dispatch')->setName('userpage');
 
-$app->get('/createEpreuve/{id}', 'App\Controllers\UserController:creationEpreuve')->setName('createEpreuve');
+$app->get('/createEpreuve/{id}', 'App\Controllers\EpreuveController:creationEpreuve')->setName('createEpreuve');
 
 $app->get('/signuporg', 'App\Controllers\UserController:signupOrg')->setName('signuporg');
 
@@ -31,4 +31,3 @@ $app->get('/loginuser', 'App\Controllers\UserController:loginPageUser')->setName
 $app->post('/loginuser', 'App\Controllers\UserController:loginUser');
 
 $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
-
