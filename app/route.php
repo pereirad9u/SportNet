@@ -20,7 +20,7 @@ $app->post('/createevent','App\Controllers\EventController:saveEvent');
 
 $app->get('/anEventOrg/{id}','App\Controllers\EventController:anEventOrg')->setName('anEventOrg');
 
-$app->get('/anevent/{id}','App\Controllers\EventController:anEvent')->setName('anEvent');
+$app->get('/anEvent/{id}','App\Controllers\EventController:anEvent')->setName('anEvent');
 
 $app->post('/signuporg', 'App\Controllers\UserController:addMemberOrg');
 

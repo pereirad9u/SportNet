@@ -84,7 +84,7 @@
             {% else %}
                 {% if org is defined %}
                 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ org.prenom }} {{ org.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
-                <li><a href="/add"><i class="material-icons right">add</i>Créer un évènement</a></li>
+                <li><a href="/createevent"><i class="material-icons right">add</i>Créer un évènement</a></li>
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown2">mes évènements<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% else %}
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown3">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
