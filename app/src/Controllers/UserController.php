@@ -37,6 +37,7 @@ final class UserController
     }
 
     public function signupUser(Request $request, Response $response, $args){
+
       return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
     }
 
