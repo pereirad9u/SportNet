@@ -11,7 +11,7 @@ namespace App\Controllers;
 use App\Models\Epreuves;
 use App\Models\Events;
 use App\Models\UserEpreuve;
-use App\Models\User;
+use App\Models\Users;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -143,7 +143,7 @@ class EpreuveController
       $tabUserEpreuve = UserEpreuve::where('id_epreuves','like',$args['id'])->get();
       $tabParticipants = array();
       foreach ($tabUserEpreuve as $u){
-        $user = User::where('id','like',$u->id_users)->first();
+        $user = Users::where('id','like',$u->id_users)->first();
         $user->doss = $u->num_dossard;
         array_push($tabParticipants, $user);
       }
