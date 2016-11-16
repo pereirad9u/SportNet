@@ -40,3 +40,4 @@ $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout')
 
 $app->get('/resultat/{id}', 'App\Controllers\EventController:affichageResultat');
 
+$app->get('/profil/{id}', 'App\Controllers\UserController:profil')->setName('profil');

@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="card-panel">
+        <div class="row">
+            <p>Nom : {{ user.nom }}</p>
+            <p>Prenom : {{ user.prenom }}</p>
+            <p>Email : {{ user.email}}</p>
+            <p>Téléphone : {{ user.telephone}}</p>
+            {% if isOrg %}
+                <p>Association : {{ user.nom_association }}</p>
+                <p>Site web : <a href="http://{{ user.siteweb }}">{{ user.siteweb }}</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>

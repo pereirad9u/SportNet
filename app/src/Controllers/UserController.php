@@ -257,4 +257,16 @@ final class UserController
         unset($_SESSION['uniqid']);
         return $response->withRedirect($this->router->pathFor('homepage'));
     }
+
+    public function profil(Request $request, Response $response, $args) {
+        $u = User::find($args['id']);
+        if ($u != null) {
+            $org = false;
+        }
+        else {
+            $u = Organisers::find($args['id']);
+            $org = true;
+        }
+        $this->view->render($response, 'profil.twig', array('user'=>$u, 'isOrg' => $org));
+    }
 }
