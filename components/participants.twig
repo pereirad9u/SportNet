@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <h3>{{ event.nom }}</h3>
+    <h4>Liste des participantsà l'épreuve : {{ epreuve.nom }}</h4>
+      <table class="bordered">
+        <thead>
+          <tr>
+              <th>Nom Prénom</th>
+              <th>Adresse email</th>
+              <th>Téléphone</th>
+              <th>Numéro de dossard</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for participants in tabParticipants %}
+          <tr>
+            <td>{{ participants.nom }}  {{ participants.prenom }}</td>
+            <td>{{ participants.email }}</td>
+            <td>{{ participants.tel }}</td>
+            <td>{{ participants.doss }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
