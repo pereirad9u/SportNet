@@ -1146,6 +1146,7 @@
 			// Set initial dimensions and start position
 			F._setDimension();
 
+
 			F.reposition();
 
 			F.isOpen = false;
