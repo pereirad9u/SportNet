@@ -4,12 +4,6 @@
             <div class="col l6 s12">
                 <p class="grey-text text-lighten-4">© SportNet 2016, Tous droits réservés.</p>
             </div>
-            <div class="col l4 offset-l2 s12">
-                <ul>
-                    <li><a class="grey-text text-lighten-3 " href="#!">Inscription pour organisateur</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Connexion pour organisateur</a></li>
-                </ul>
-            </div>
         </div>
     </div>
 </footer>
@@ -25,7 +19,13 @@
 </script>
 <script type="text/javascript" src="/JS/inscription.js"></script>
 <script type="text/javascript" src="/JS/ajoutEpreuve.js"></script>
-<script> $('.datepicker').pickadate({
+<script>
+    $('.button-collapse').sideNav();
+    $('.carousel.carousel-slider').carousel({
+        full_width: true,
+        time_constant: 100
+    });
+    $('.datepicker').pickadate({
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 90 // Creates a dropdown of 15 years to control year
     });

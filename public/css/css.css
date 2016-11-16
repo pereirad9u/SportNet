@@ -23,13 +23,14 @@
     padding: 0;
     margin: 0;
 }
-#dropdown1{
-    margin-top: 64px;
-}
-#dropdown1 a{
-    font-size: 0.9rem;
-}
 
+.dropdown a{
+    font-size: 0.9rem !important;
+}
+.dropdown{
+    margin-top: 64px !important;
+
+}
 #footer_row{
     margin-bottom: 0;
 }
