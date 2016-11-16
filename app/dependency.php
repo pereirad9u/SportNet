@@ -97,6 +97,12 @@ $container['App\Controllers\EventController'] = function ($c) {
     );
 };
 
+$container['App\Controllers\AjaxController'] = function ($c) {
+    return new App\Controllers\AjaxController(
+        $c
+    );
+};
+
 
 # -----------------------------------------------------------------------------
 # Factories Models
