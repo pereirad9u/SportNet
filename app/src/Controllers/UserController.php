@@ -6,6 +6,7 @@ use App\Models\Epreuves;
 use App\Models\Organisers;
 use App\Models\User;
 
+use App\Models\UserEpreuve;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -266,7 +267,15 @@ final class UserController
         $u = User::find($args['id']);
         if ($u != null) {
             $org = false;
-            $epreuve = Epreuves::where
+            $epreuveUser = [];
+            $uepreuve = UserEpreuve::where('id_user','=',$args['id'])->get();
+            $epreuves = Epreuves::all();
+            die(var_dump($uepreuve));
+            $epreuves->filter(function($epreuve) {
+                $e = [];
+                if (in_array($epreuve->id));
+            });
+
         } else {
             $u = Organisers::find($args['id']);
             $org = true;
