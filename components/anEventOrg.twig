@@ -1,5 +1,7 @@
 
 <div class="container  ">
+
+  <form method="post" action="/postresults" enctype="multipart/form-data">
     <div class="row">
 
 
@@ -43,8 +45,25 @@
                 {% for epreuve in tabEpreuve %}
                     <div>
                         <p>{{ epreuve.nom }}</p>
+<<<<<<< HEAD
                         <button class="btn waves-effect waves-light teal lighten-1">Participant à l'épreuve</button>
                         <button class="btn waves-effect waves-light teal lighten-1">ajouter les résultat de l'épreuve</button>
+=======
+
+
+                        <div class="file-field input-field">
+                            <div class="btn teal">
+                                <span>Ajouter les résultat de l'épreuve</span>
+                                <input type="file" name="res[]" accept=".csv">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input required="" class="file-path validate" type="text" name="path_file">
+                            </div>
+
+                            <input class="hiddendiv" value="{{epreuve.id}}" name="res_id[]">
+                        </div>
+
+>>>>>>> e09fb62f75665fed4423a68df04b57f22b402d69
                     </div>
                 {% endfor %}
             </div>
@@ -53,6 +72,12 @@
 
     </div>
 
+    <div class="row center">
+        <button class="btn waves-effect waves-light teal " type="submit" name="action"  value="postresults">Fin de l'évènement
+            <i class="material-icons right">send</i>
+        </button>
+    </div>
 
+    </form>
 
 </div>
