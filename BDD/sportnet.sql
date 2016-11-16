@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 16, 2016 at 02:29 PM
+-- Generation Time: Nov 16, 2016 at 04:23 PM
 -- Server version: 5.6.30-1
 -- PHP Version: 7.0.12-1
 
@@ -46,7 +46,9 @@ CREATE TABLE `epreuves` (
 --
 
 INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `photo`, `inscription`, `id_evenement`, `nb_participants`, `nb_participants_max`, `prix`, `discipline`, `image`) VALUES
-('582c34273c556', 'saute mouton', 'de la merde', '2016-11-17', '', 1, '582c339518a14', 0, 333, 333, 'saut', 'images/582c3427381b5.jpg');
+('582c34273c556', 'saute mouton', 'de la merde', '2016-11-17', '', 1, '582c339518a14', 0, 333, 333, 'saut', 'images/582c3427381b5.jpg'),
+('582c7907849c3', 'Lancer de bites', 'Lisez le nom...\r\nTout est dit.', '2016-11-25', '', 1, '582c78486ef3a', 0, 10, 10, 'lancé', 'images/582c790781564.jpeg'),
+('582c7907947a3', 'Course déguisé en couteau', 'Effectuez une course de 15km déguisé en votre plus beau canif!\r\nUne expérience inoubliable.', '2016-11-26', '', 1, '582c78486ef3a', 0, 300, 300, 'course', 'images/582c79079101a.jpg');
 
 -- --------------------------------------------------------
 
@@ -72,7 +74,8 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `description`, `discipline`, `etat`, `id_organisateur`, `nb_participants`) VALUES
-('582c339518a14', 'Une flemme intense', 'in your ass', '2016-11-17', '2016-11-18', 'Un truc de merde', '', 'ouvertes', '', 0);
+('582c339518a14', 'Une flemme intense', 'in your ass', '2016-11-17', '2016-11-18', 'Un truc de merde', '', 'ouvertes', '', 0),
+('582c78486ef3a', 'Une flemme intense II', 'Quelque part', '2016-11-24', '2016-11-26', 'Un évènement pronant la flemme.\r\nDeuxième édition.\r\nPensez à prendre vos bites et vos couteaux.', '', 'ouvertes', '582b1f4d19a72', 0);
 
 -- --------------------------------------------------------
 
