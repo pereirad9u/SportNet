@@ -467,23 +467,43 @@ final class UserController
         $_SESSION['panier'] = array();
       }
       $epreuve = Epreuves::find($args['idepreuve']);
-      foreach (UserGroup::where('id_group','=',$args['idgroupe']) as $membres) {
-        $new_epreuve = new Epreuves();
-
-        $new_epreuve = $epreuve;
-
-
-        $new_epreuve->id_participant = $membres->id_utilisateur;
-        array_push($_SESSION['panier'],$e);
-      }
-      $epreuve->id_participant = $_SESSION['uniqid'];
+      $epreuve_responsable = new Epreuves();
+      $epreuve_responsable = $epreuve;
+      $epreuve_responsable->id_participant = $_SESSION['uniqid'];
       array_push($_SESSION['panier'],$epreuve);
+      foreach (UserGroup::where('id_group','=',$args['idgroupe'])->get() as $membres) {
+        $new_epreuve = new Epreuves();
+        $new_epreuve->id = $epreuve->id;
+        $new_epreuve->nom = $epreuve->nom;
+        $new_epreuve->description = $epreuve->description;
+        $new_epreuve->date = $epreuve->date;
+        $new_epreuve->inscription = $epreuve->inscription;
+        $new_epreuve->id_evenement = $epreuve->id_evenement;
+        $new_epreuve->nb_participants = $epreuve->nb_participants;
+        $new_epreuve->nb_participants_max = $epreuve->nb_participants_max;
+        $new_epreuve->prix = $epreuve->prix;
+        $new_epreuve->discipline = $epreuve->discipline;
+        $new_epreuve->image = $epreuve->image;
+        $new_epreuve->id_participant = $membres->id_utilisateur;
+
+        array_push($_SESSION['panier'],$new_epreuve);
+        var_dump($_SESSION);
+      }
       //$e->prix = $e->prix * UserGroup::where('id_group','=',$args['idgroup'])->count();
       //array_push($_SESSION['panier'],$e);
       $event = Events::find($epreuve->id_evenement);
       $organiser = Organisers::find($event->id_organisateur);
       $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+
+      //a remplacer par un redirect !!!
+      if (Groups::where('id_responsable','=',$_SESSION['uniqid'])->count()  > 0){
+        $tabGroups = array();
+        foreach (Groups::where('id_responsable','=',$_SESSION['uniqid'])->get() as $group) {
+            array_push($tabGroups,$group);
+        }
+      }
+      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
+      //return $response->withRedirect($this->router->pathFor('anEvent'));
     }
 
     public function panier(Request $request, Response $response, $args){

@@ -180,7 +180,7 @@ final class EventController
             }
             return $this->view->render($response,'manageEvents.twig', array('events' => $e));
         }else{
-            return $this->response->withRedirect($this->view->pathFor('homrpage'));
+            return $this->response->withRedirect($this->view->pathFor('homepage'));
         }
 
     }
