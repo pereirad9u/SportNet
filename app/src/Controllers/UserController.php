@@ -6,6 +6,8 @@ use App\Models\Epreuves;
 use App\Models\Organisers;
 use App\Models\UserEpreuve;
 use App\Models\Users;
+use App\Models\Events;
+use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -37,7 +39,6 @@ final class UserController
     }
 
     public function signupUser(Request $request, Response $response, $args){
-
       return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
     }
 
@@ -170,8 +171,17 @@ final class UserController
                     $m->telephone = $tel;
                     $m->motdepasse = $pass;
                     $m->save ();
-                    var_dump($_SESSION);
-                    return $response->withRedirect($this->router->pathFor('homepage'));
+
+                    $_SESSION['uniqid']=$m->id;
+                    $_SESSION['type']='user';
+
+                    if(isset($_SESSION['route'])){
+                        $r = $_SESSION['route'];
+                        unset($_SESSION['route']);
+                        return $response->withStatus(302)->withHeader('Location',$r);
+                    }else{
+                        return $response->withRedirect($this->router->pathFor('homepage'));
+                    }
 
                 }
                 else {
@@ -235,7 +245,14 @@ final class UserController
                     if (password_verify($password, $m->motdepasse)) {
                         $_SESSION["uniqid"] = $m->id;
                         $_SESSION["type"] = 'user';
-                        return $response->withRedirect($this->router->pathFor('homepage'));
+                        if(isset($_SESSION['route'])){
+                            $r = $_SESSION['route'];
+                            unset($_SESSION['route']);
+                            return $response->withStatus(302)->withHeader('Location',$r);
+                        }else{
+                            return $response->withRedirect($this->router->pathFor('homepage'));
+                        }
+
                     }
                     else {
                         $this->view->render($response, 'loginuser.twig', array('errors' => "error"));
@@ -312,5 +329,41 @@ final class UserController
         }
         return $response->withRedirect($this->router->pathFor('homepage'));
       }
+    }
+
+    public function inscription(Request $request, Response $response, $args){
+        if(isset($_SESSION['uniqid']) && isset($_SESSION['type']) && $_SESSION['type']=='user'){
+            if(sizeof(UserEpreuve::where('id_users',$_SESSION['uniqid'])->where('id_epreuves',$args['id'])->get()) >0){
+                return $this->view->render($response,'inscription.twig',['erreur'=>'Vous êtes déjà inscrit à cette épreuve']);
+
+            }else{
+                $inscription = new UserEpreuve();
+                $inscription->id_users = $_SESSION['uniqid'];
+                $inscription->id_epreuves = $args['id'];
+                $inscription->save();
+                $epreuve = Epreuves::find($args['id']);
+                $epreuve->nb_participants++;
+                $epreuve->save();
+                $event = Events::find($epreuve->id_evenement);
+                $tabEpreuves = Epreuves::where('id_evenement',$event->id)->get();
+                $ajout=true;
+                foreach($tabEpreuves as $t){
+                    if(UserEpreuve::where('id_users',$_SESSION['uniqid'])->where('id_epreuves',$t->id)->count()>0){
+                        $ajout=false;
+                        break;
+                    }
+                }
+                if ($ajout){
+                    $event->nb_participants++;
+                    $event->save();
+                }
+                return $this->view->render($response,'inscription.twig');
+            }
+        }else{
+
+            $_SESSION['route']=$request->getUri()->getPath();
+            return $response->withRedirect($this->router->pathFor('loginuser'));
+        }
+
     }
 }
