@@ -46,14 +46,26 @@
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
             <p>Prix : {{ epreuve.prix }}€ </p>
             {% if epreuve.nb_participants >= epreuve.nb_participants_max   %}
-                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href=""> S'inscrire</a>
             {% else %}
-            <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+            <div id="modal{{epreuve.id}}" class="modal">
+              <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+              </div>
+              <div class="modal-footer">
+                <a href="/inscription/{{ epreuve.id }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer tout de suite</a>
+                <a href="/addpanier/{{ epreuve.id }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer plus tard</a>
+              </div>
+            </div>
+            <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}"> S'inscrire</a>
             {% endif %}
         </div>
 
         {% endfor %}
 
     </div>
+
+
 
 </div>
