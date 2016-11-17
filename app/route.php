@@ -49,6 +49,14 @@ $app->get('/profil/{id}', 'App\Controllers\UserController:profil')->setName('pro
 
 $app->get('/manageEvents', 'App\Controllers\EventController:manage')->setName('manage');
 
+$app->get('/search', 'App\Controllers\HomeController:search')->setName('search');
+
+$app->get('/addpanier/{id}','App\Controllers\UserController:addPanier')->setName('addpanier');
+
+$app->get('/panier','App\Controllers\UserController:panier')->setName('panier');
+
+$app->get('/delElemPanier/{id}','App\Controllers\UserController:delelempanier');
+
 $app->get('/inscription/{id}','App\Controllers\UserController:inscription')->setName('inscription');
 
-$app->get('/search', 'App\Controllers\HomeController:search')->setName('search');
+$app->get('/inscriptionall', 'App\Controllers\UserController:inscriptionall')->setName('inscriptionall');

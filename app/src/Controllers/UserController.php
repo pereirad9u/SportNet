@@ -366,4 +366,54 @@ final class UserController
         }
 
     }
+
+    public function addPanier(Request $request, Response $response, $args){
+      $e = Epreuves::find($args['id']);
+      array_push($_SESSION['panier'],$e);
+      //$_SESSION['panier'][sizeof($_SESSION['panier'])+1] = $e;
+      $event = Events::find($e->id_evenement);
+      $organiser = Organisers::find($event->id_organisateur);
+      $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+    }
+
+    public function panier(Request $request, Response $response, $args){
+      if (isset($_SESSION['panier'])){
+        $prix_total = 0;
+        foreach ($_SESSION['panier'] as $elem) {
+          $prix_total = $prix_total + $elem->prix;
+        }
+        return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+      }else{
+        return $response->withRedirect($this->router->pathFor('homepage'));
+      }
+    }
+
+    public function delelempanier(Request $request, Response $response, $args){
+      foreach ($_SESSION['panier'] as $value) {
+        if($value->id_epreuves != $args['id']){
+          array_push($tab, $value);
+        }
+      }
+      unset($_SESSION['panier']);
+      $_SESSION['panier']= array();
+      $prix_total = 0;
+      foreach ($tab as $new_value) {
+        array_push($_SESSION['panier'], $new_value);
+        $prix_total = $prix_total + $new_value->prix;
+      }
+      return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+    }
+
+    public function inscriptionall(Request $request, Response $response, $args){
+      foreach($_SESSION['panier'] as $epreuve){
+        $e = new UserEpreuve();
+        $e->id_users = $_SESSION['uniqid'];
+        $e->id_epreuves = $epreuve->id;
+        $e->num_dossard = UserEpreuve::where('id_epreuves','=',$epreuve->id)->max('num_dossard') + 1;
+        $e->save();
+      }
+      unset($_SESSION['panier']);
+      return $response->withRedirect($this->router->pathFor('homepage'));
+    }
 }
