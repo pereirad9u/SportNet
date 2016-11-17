@@ -17,3 +17,5 @@ bootstrap/cache/
 .idea/
 storage/
 config/
+config/*
+storage/

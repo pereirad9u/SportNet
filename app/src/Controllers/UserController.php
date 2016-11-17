@@ -2,12 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Models\Epreuves;
 use App\Models\Organisers;
-use App\Models\User;
-
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Models\UserEpreuve;
+use App\Models\Users;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class UserController
 {
@@ -67,7 +67,7 @@ final class UserController
                 if ($email != filter_var ( $email, FILTER_VALIDATE_EMAIL )) {
                     array_push ( $errors, "Adresse email invalide, merci de corriger" );
                 } else {
-                    $emailVerif = \App\Models\User::where ( 'email', $email )->get ();
+                    $emailVerif = \App\Models\Organisers::where ( 'email', $email )->get ();
                     if (sizeof ( $emailVerif ) != 0) {
                         array_push ( $errors, "Un compte a déjà été créé avec cette adresse email ou ce pseudo" );
                     }
@@ -141,7 +141,7 @@ final class UserController
                 if ($email != filter_var ( $email, FILTER_VALIDATE_EMAIL )) {
                     array_push ( $errors, "Adresse email invalide, merci de corriger" );
                 } else {
-                    $emailVerif = \App\Models\User::where ( 'email', $email )->get ();
+                    $emailVerif = \App\Models\Users::where ( 'email', $email )->get ();
                     if (sizeof ( $emailVerif ) != 0) {
                         array_push ( $errors, "Un compte a déjà été créé avec cette adresse email ou ce pseudo" );
                     }
@@ -162,7 +162,7 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
-                    $m = new \App\Models\User();
+                    $m = new \App\Models\Users();
                     $m->id = uniqid();
                     $m->nom = $nom;
                     $m->prenom = $prenom;
@@ -230,7 +230,7 @@ final class UserController
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
                 $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-                $m = User::where("email", $email)->get()->first();
+                $m = Users::where("email", $email)->get()->first();
                 if(isset($m->id)) {
                     if (password_verify($password, $m->motdepasse)) {
                         $_SESSION["uniqid"] = $m->id;
@@ -257,6 +257,29 @@ final class UserController
     public function logout(Request $request, Response $response, $args){
         unset($_SESSION['uniqid']);
         return $response->withRedirect($this->router->pathFor('homepage'));
+    }
+
+
+    public function profil(Request $request, Response $response, $args)
+    {
+        $u = Users::find($args['id']);
+        if ($u != null) {
+            $org = false;
+            $epreuveUser = [];
+            $uepreuve = UserEpreuve::where('id_user','=',$args['id'])->get();
+            $epreuves = Epreuves::all();
+            die(var_dump($uepreuve));
+            $epreuves->filter(function($epreuve) {
+                $e = [];
+                if (in_array($epreuve->id));
+            });
+
+        } else {
+            $u = Organisers::find($args['id']);
+            $org = true;
+        }
+
+        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org));
     }
 
     public function upload_resultat(Request $request, Response $response, $args){
