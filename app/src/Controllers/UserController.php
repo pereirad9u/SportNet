@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\Epreuves;
+use App\Models\Events;
 use App\Models\Organisers;
 use App\Models\UserEpreuve;
 use App\Models\Users;
+use Illuminate\Support\Facades\Event;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -266,14 +268,27 @@ final class UserController
         if ($u != null) {
             $org = false;
             $epreuveUser = [];
-            $uepreuve = UserEpreuve::where('id_user','=',$args['id'])->get();
-            $epreuves = Epreuves::all();
-            die(var_dump($uepreuve));
-            $epreuves->filter(function($epreuve) {
-                $e = [];
-                if (in_array($epreuve->id));
-            });
+            $tabEvent = [];
+            $uepreuve = UserEpreuve::where('id_users','=',$args['id'])->get();
+            foreach ($uepreuve as $t){
+                $e = Epreuves::find($t->id_epreuves);
+                if(!in_array($e->id_evenement,$tabEvent)){
+                    $event = Events::find($e->id_evenement);
+                    $tabEvent[$event->id] = $event->date_debut;
+                }
+            }
+            var_dump($tabEvent);
 
+            /*
+            $epreuves = Epreuves::all();
+            $epreuves->filter(function($epreuve) use ($uepreuve) {
+                $e = [];
+                for($x=0; $x <= sizeof($uepreuve); $x++) {
+                    if (in_array($epreuve->id, $uepreuve))
+                        echo "bonjour";
+                }
+            });*/
+        //die();
         } else {
             $u = Organisers::find($args['id']);
             $org = true;
