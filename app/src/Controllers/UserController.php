@@ -454,6 +454,7 @@ final class UserController
         $_SESSION['panier'] = array();
       }
       $e = Epreuves::find($args['id']);
+      $e->id_elem = uniqid();
       array_push($_SESSION['panier'],$e);
       $event = Events::find($e->id_evenement);
 
@@ -470,6 +471,9 @@ final class UserController
       $epreuve_responsable = new Epreuves();
       $epreuve_responsable = $epreuve;
       $epreuve_responsable->id_participant = $_SESSION['uniqid'];
+      $epreuve_responsable->nom_responsable = Users::find($_SESSION['uniqid'])->nom;
+      $epreuve_responsable->prenom_responsable = Users::find($_SESSION['uniqid'])->prenom;
+      $epreuve_responsable->id_elem = uniqid();
       array_push($_SESSION['panier'],$epreuve);
       foreach (UserGroup::where('id_group','=',$args['idgroupe'])->get() as $membres) {
         $new_epreuve = new Epreuves();
@@ -485,9 +489,10 @@ final class UserController
         $new_epreuve->discipline = $epreuve->discipline;
         $new_epreuve->image = $epreuve->image;
         $new_epreuve->id_participant = $membres->id_utilisateur;
-
+        $new_epreuve->nom_participant = Users::find($membres->id_utilisateur)->nom;
+        $new_epreuve->prenom_participant = Users::find($membres->id_utilisateur)->prenom;
+        $new_epreuve->id_elem = uniqid();
         array_push($_SESSION['panier'],$new_epreuve);
-        var_dump($_SESSION);
       }
       //$e->prix = $e->prix * UserGroup::where('id_group','=',$args['idgroup'])->count();
       //array_push($_SESSION['panier'],$e);
@@ -515,10 +520,10 @@ final class UserController
     }
 
     public function delelempanier(Request $request, Response $response, $args){
-      /**
+      
       $tab = array();
       foreach ($_SESSION['panier'] as $value) {
-        if($value->id_epreuves != $args['id']){
+        if($value->id_elem != $args['idelem']){
           array_push($tab, $value);
         }
       }
@@ -528,12 +533,6 @@ final class UserController
       foreach ($tab as $new_value) {
         array_push($_SESSION['panier'], $new_value);
         $prix_total = $prix_total + $new_value->prix;
-      }
-      */
-      foreach ($_SESSION['panier'] as $key=>$value) {
-        if($value->id_epreuves == $args['id']){
-          unset($_SESSION['panier'][$key]);
-        }
       }
       return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
     }
