@@ -96,47 +96,47 @@ final class EventController
     }
 
     private function modifDate($date) {
-        $jm = explode(' ', $date);
-        $m = explode(',', $jm[1]);
-        switch ($m[0]) {
+        $date_explode = explode(' ', $date);
+        $mois_explode = explode(',', $date_explode[1]);
+        switch ($mois_explode[0]) {
             case "January":
-                $m[0] = '01';
+                $mois_explode[0] = '01';
                 break;
             case "February":
-                $m[0] = '02';
+                $mois_explode[0] = '02';
                 break;
             case "March":
-                $m[0] = '03';
+                $mois_explode[0] = '03';
                 break;
             case "April":
-                $m[0] = '04';
+                $mois_explode[0] = '04';
                 break;
             case "May":
-                $m[0] = '05';
+                $mois_explode[0] = '05';
                 break;
             case "June":
-                $m[0] = '06';
+                $mois_explode[0] = '06';
                 break;
             case "July":
-                $m[0] = '07';
+                $mois_explode[0] = '07';
                 break;
             case "August":
-                $m[0] = '08';
+                $mois_explode[0] = '08';
                 break;
             case "September":
-                $m[0] = '09';
+                $mois_explode[0] = '09';
                 break;
             case "October":
-                $m[0] = '10';
+                $mois_explode[0] = '10';
                 break;
             case "November":
-                $m[0] = '11';
+                $mois_explode[0] = '11';
                 break;
             case "December":
-                $m[0] = '12';
+                $mois_explode[0] = '12';
                 break;
         }
-        return "$jm[2]-$m[0]-$jm[0]";
+        return "$date_explode[2]-$mois_explode[0]-$date_explode[0]";
     }
 
     private function renderDate($date){
@@ -152,9 +152,9 @@ final class EventController
         $datas[0] = ['nom', 'prenom', 'classement', 'temps'];
         foreach ($resultats as $r) {
             $d=[];
-            $u = Users::find($r->id_utilisateur);
-            array_push($d, $u->nom);
-            array_push($d, $u->prenom);
+            $user = Users::find($r->id_utilisateur);
+            array_push($d, $user->nom);
+            array_push($d, $user->prenom);
             array_push($d, $r->classement);
             array_push($d, $r->temps);
             array_push($datas, $d);
@@ -164,9 +164,9 @@ final class EventController
 
     public function manage(Request $request, Response $response,$args){
         if(isset($_SESSION['uniqid']) && isset($_SESSION['type']) && $_SESSION['type'] == 'org'){
-            $e = Events::where('id_organisateur',$_SESSION['uniqid'])->get();
+            $events = Events::where('id_organisateur',$_SESSION['uniqid'])->get();
 
-            foreach ($e as $item){
+            foreach ($events as $item){
                 $item->date_debut = $this->renderDate($item->date_debut);
                 $item->nb_epreuve = Epreuves::where('id_evenement',$item->id)->count();
                 switch ($item->etat){
