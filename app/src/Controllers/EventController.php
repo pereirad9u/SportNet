@@ -10,10 +10,12 @@
 namespace App\Controllers;
 
 use App\Models\Epreuves;
+use App\Models\UserEpreuve;
 use App\Models\Events;
 use App\Models\Results;
 use App\Models\Users;
 use App\Models\Organisers;
+use App\Models\Groups;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -76,7 +78,21 @@ final class EventController
         $event = Events::find($args['id']);
         $organiser = Organisers::find($event->id_organisateur);
         $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-        return $this->view->render($response,'anEvent.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+        foreach ($tabEpreuve as $epreuve) {
+          if (UserEpreuve::where('id_epreuves','=',$epreuve->id)->where('id_users','=',$_SESSION['uniqid'])->count() > 0){
+            $epreuve->participe = true;
+          }else{
+            $epreuve->participe = false;
+          }
+        }
+
+        if (Groups::where('id_responsable','=',$_SESSION['uniqid'])->count()  > 0){
+          $tabGroups = array();
+          foreach (Groups::where('id_responsable','=',$_SESSION['uniqid'])->get() as $group) {
+              array_push($tabGroups,$group);
+          }
+        }
+        return $this->view->render($response,'anEvent.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
     }
 
     private function modifDate($date) {

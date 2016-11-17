@@ -1,8 +1,8 @@
-
+{{dump(elements)}}
 
 <div class="container">
   <div class="row">
-  {% if prix_total >= 0 %}
+  {% if elements|length > 0 %}
   <div class="col s5 offset-s2">
     <ul>
     {% for elem in elements %}
