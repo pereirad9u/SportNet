@@ -53,11 +53,11 @@ class EpreuveController
             $extension_upload = strtolower(substr(strrchr($_FILES['image']['name'], '.'), 1));
             if (in_array($extension_upload, $extensions_valides)) {
                 if ($_FILES['image']['size'] <= 67108864) {
-                    $n = uniqid().'.'.$extension_upload;
-                    $nom_pic = "images/$n";
-                    $pic_r = $_FILES['image']['tmp_name'];
-                    $this->resize_image($pic_r, null, 200, 200);
-                    $resultat = move_uploaded_file($pic_r, $nom_pic);
+                    $nom_image = uniqid().'.'.$extension_upload;
+                    $lien_nom_image = "images/$nom_image";
+                    $img_to_resize = $_FILES['image']['tmp_name'];
+                    $this->resize_image($img_to_resize, null, 200, 200);
+                    $resultat = move_uploaded_file($img_to_resize, $lien_nom_image);
                     if ($resultat) {
                     } else {
                         return $this->view->render($response, 'creationEpreuve.twig', ['erreur' => 'Erreur lors de l\'envoye du fichier, merci de recommencer.']);
@@ -81,7 +81,7 @@ class EpreuveController
         $epreuve->inscription = 1;
         $epreuve->id_evenement = $args['id'];
         $epreuve->discipline = $discipline;
-        $epreuve->image = $nom_pic;
+        $epreuve->image = $lien_nom_image;
         $epreuve->save();
 
         for ($i=1; $i<=$nbEpreuve;$i++){
@@ -98,11 +98,11 @@ class EpreuveController
                 $extension_upload = strtolower(substr(strrchr($_FILES['image'.$num]['name'], '.'), 1));
                 if (in_array($extension_upload, $extensions_valides)) {
                     if ($_FILES['image'.$num]['size'] <= 67108864) {
-                        $n = uniqid().'.'.$extension_upload;
-                        $nom_pic = "images/$n";
-                        $pic_r = $_FILES['image'.$num]['tmp_name'];
-                        $this->resize_image($pic_r, null, 200, 200);
-                        $resultat = move_uploaded_file($pic_r, $nom_pic);
+                        $nom_image = uniqid().'.'.$extension_upload;
+                        $lien_nom_image = "images/$nom_image";
+                        $img_to_resize = $_FILES['image'.$num]['tmp_name'];
+                        $this->resize_image($img_to_resize, null, 200, 200);
+                        $resultat = move_uploaded_file($img_to_resize, $lien_nom_image);
                         if ($resultat) {
                         } else {
                             return $this->view->render($response, 'creationEpreuve.twig', ['erreur' => 'Erreur lors de l\'envoye du fichier, merci de recommencer.']);
@@ -126,7 +126,7 @@ class EpreuveController
             $epreuve->inscription = 1;
             $epreuve->id_evenement = $args['id'];
             $epreuve->discipline = $discipline;
-            $epreuve->image = $nom_pic;
+            $epreuve->image = $lien_nom_image;
             $epreuve->save();
         }
 
@@ -142,21 +142,21 @@ class EpreuveController
       $event = Events::find($epreuve->id_evenement);
       $tabUserEpreuve = UserEpreuve::where('id_epreuves','like',$args['id'])->get();
       $tabParticipants = array();
-      foreach ($tabUserEpreuve as $u){
-        $user = Users::where('id','like',$u->id_users)->first();
-        $user->doss = $u->num_dossard;
+      foreach ($tabUserEpreuve as $user_epreuve){
+        $user = Users::where('id','like',$user_epreuve->id_users)->first();
+        $user->doss = $user_epreuve->num_dossard;
         array_push($tabParticipants, $user);
       }
 
       $tab_csv = array(array('Nom','Prénom','Adresse email', 'Téléphone', 'Numéro de dossard'));
 
-      foreach ($tabParticipants as $p) {
-        if ($p->telephone != ""){
-          $telephone = $p->telephone;
+      foreach ($tabParticipants as $participants) {
+        if ($participants->telephone != ""){
+          $telephone = $participants->telephone;
         }else{
           $telephone = 'non transmis';
         }
-        array_push($tab_csv,array($p->nom, $p->prenom, $p->email, $telephone, $p->num_dossard));
+        array_push($tab_csv,array($participants->nom, $participants->prenom, $participants->email, $telephone, $participants->num_dossard));
 
       }
 
@@ -171,47 +171,53 @@ class EpreuveController
     }
 
     private function modifDate($date) {
-        $jm = explode(' ', $date);
-        $m = explode(',', $jm[1]);
-        switch ($m[0]) {
+        /**
+          format date initial : DD MONTH,YYYY
+        */
+        $date_explode = explode(' ', $date);
+        $mois_explode = explode(',', $date_explode[1]);
+        switch ($mois_explode[0]) {
             case "January":
-                $m[0] = '01';
+                $mois_explode[0] = '01';
                 break;
             case "February":
-                $m[0] = '02';
+                $mois_explode[0] = '02';
                 break;
             case "March":
-                $m[0] = '03';
+                $mois_explode[0] = '03';
                 break;
             case "April":
-                $m[0] = '04';
+                $mois_explode[0] = '04';
                 break;
             case "May":
-                $m[0] = '05';
+                $mois_explode[0] = '05';
                 break;
             case "June":
-                $m[0] = '06';
+                $mois_explode[0] = '06';
                 break;
             case "July":
-                $m[0] = '07';
+                $mois_explode[0] = '07';
                 break;
             case "August":
-                $m[0] = '08';
+                $mois_explode[0] = '08';
                 break;
             case "September":
-                $m[0] = '09';
+                $mois_explode[0] = '09';
                 break;
             case "October":
-                $m[0] = '10';
+                $mois_explode[0] = '10';
                 break;
             case "November":
-                $m[0] = '11';
+                $mois_explode[0] = '11';
                 break;
             case "December":
-                $m[0] = '12';
+                $mois_explode[0] = '12';
                 break;
         }
-        return "$jm[2]-$m[0]-$jm[0]";
+        /**
+          format date final : YYYY-MM-DD
+        */
+        return "$date_explode[2]-$mois_explode[0]-$date_explode[0]";
     }
 
 
