@@ -16,71 +16,113 @@
 <div class="container">
     <div class="section">
         <h5>Vos prochaines épreuves :</h5>
-        <div class="row">
-            <div class="card blue-grey darken-1 col s12 m4 l5 ">
-                <div class="card-content white-text">
-                    <span class="card-title">Envent name</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Voir</a>
-                </div>
-            </div>
-            <div class="card blue-grey darken-1 col s12 m4 l5 offset-l1">
-                <div class="card-content white-text">
-                    <span class="card-title">Envent name</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Voir</a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
+        {% if events  |length <= 0 %}
+        <div class="row col s12 m8 l8 center card-panel "><h4>Vous n'avez pas encore créé d'évènements, pour commercer
+                rendez vous sur
+                <a href="/createevent">Créer un évènement</a>
+            </h4></div>
 
-        </div>
-    </div>
+        {% else %}
+        <div class="section">
+            <h5>Vos événement :</h5>
+            <div class="row">
+                {% for e in events %}
+                    {% if events|length == 1 %}
+                        <div class="card blue-grey darken-1 col s12 m5 l5 offset-m4 offset-l4">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ e.nom }}</span>
+                                <p>Date : {{ e.date_debut }}</p>
+                                <p>Nombre participant : {{ e.nb_participants }}</p>
+                                <p>Nombre d'épreuves : {{ e.nb_epreuve }}</p>
+                                <p>Etat : {{ e.etat }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/anEvent/{{ e.id_evenement }}">Voir</a>
+                            </div>
+                        </div>
+                    {% elseif events|length == 2 %}
+                        <div class="card blue-grey darken-1 col s12 m5 l5 offset-m1 offset-l1">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ e.nom }}</span>
+                                <p>Date : {{ e.date_debut }}</p>
+                                <p>Nombre participant : {{ e.nb_participants }}</p>
+                                <p>Nombre d'épreuves : {{ e.nb_epreuve }}</p>
+                                <p>Etat : {{ e.etat }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/anEventOrg/{{ e.id }}">Gérer</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card blue-grey darken-1 col s12 m3 offset-m1 l3 offset-l1">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ e.nom }}</span>
+                                <p>Date : {{ e.date_debut }}</p>
+                                <p>Nombre participant : {{ e.nb_participants }}</p>
+                                <p>Nombre d'épreuves : {{ e.nb_epreuve }}</p>
+                                <p>Etat : {{ e.etat }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/anEventOrg/{{ e.id }}">Gérer</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
 
     <div class="section">
         <h5>Vos dernier résultats :</h5>
-        <div class="row">
-            <div class="card blue-grey darken-1 col s12 m4 l3 ">
-                <div class="card-content white-text">
-                    <span class="card-title">Epreuve name</span>
-                    <p>Date : 15/05/2016</p>
-                    <p>Temps : 1h35m53s</p>
-                    <p>Classement : 23 ème</p>
+        {% if results  |length <= 0 %}
+        <div class="row col s12 m8 l8 center card-panel "><h4>Vous n'avez pas encore créé de resultats
+            </h4></div>
 
-                </div>
-                <div class="card-action">
-                    <a href="#">Voir</a>
-                </div>
+        {% else %}
+            <div class="row">
+                {% for r in results %}
+                    {% if results|length == 1 %}
+                        <div class="card blue-grey darken-1 col s12 m5 l5 offset-m4 offset-l4">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ r.nom }}</span>
+                                <p>Evenement : {{ r.nomE }}</p>
+                                <p>Date : {{ r.date }}</p>
+                                <p>Temps : {{ r.temps }}</p>
+                                <p>Classement : {{ r.classement }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/resultat/{{ r.id_evenement }}">Voir</a>
+                            </div>
+                        </div>
+                    {% elseif events|length == 2 %}
+                        <div class="card blue-grey darken-1 col s12 m5 l5 offset-m1 offset-l1">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ r.nom }}</span>
+                                <p>Evenement : {{ r.nomE }}</p>
+                                <p>Date : {{ r.date }}</p>
+                                <p>Temps : {{ r.temps }}</p>
+                                <p>Classement : {{ r.classement }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/resultat/{{ r.id_evenement }}">Voir</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card blue-grey darken-1 col s12 m3 offset-m1 l3 offset-l1">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ r.nom }}</span>
+                                <p>Evenement : {{ r.nomE }}</p>
+                                <p>Date : {{ r.date }}</p>
+                                <p>Temps : {{ r.temps }}</p>
+                                <p>Classement : {{ r.classement }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/resultat/{{ r.id_evenement }}">Voir</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
-            <div class="card blue-grey darken-1 col s12 m4 l3 offset-l1">
-                <div class="card-content white-text">
-                    <span class="card-title">Epreuve name</span>
-                    <p>Date : 15/05/2016</p>
-                    <p>Temps : 1h35m53s</p>
-                    <p>Classement : 23 ème</p>
-
-                </div>
-                <div class="card-action">
-                    <a href="#">Voir</a>
-                </div>
-            </div>
-            <div class="card blue-grey darken-1 col s12 m4 l3 offset-l1">
-                <div class="card-content white-text">
-                    <span class="card-title">Epreuve name</span>
-                    <p>Date : 15/05/2016</p>
-                    <p>Temps : 1h35m53s</p>
-                    <p>Classement : 23 ème</p>
-
-                </div>
-                <div class="card-action">
-                    <a href="#">Voir</a>
-                </div>
+            {% endif %}
             </div>
         </div>
     </div>

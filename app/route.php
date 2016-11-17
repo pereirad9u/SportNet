@@ -44,4 +44,10 @@ $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout')
 
 $app->get('/resultat/{id}', 'App\Controllers\EventController:affichageResultat');
 
+
 $app->get('/profil/{id}', 'App\Controllers\UserController:profil')->setName('profil');
+
+$app->get('/manageEvents', 'App\Controllers\EventController:manage')->setName('manage');
+
+$app->get('/inscription/{id}','App\Controllers\UserController:inscription')->setName('inscription');
+

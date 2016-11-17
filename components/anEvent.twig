@@ -22,13 +22,13 @@
     </div>
 
     <div class="row ">
-        <div class="col s6 card">
+        <div class="col s12 m6 l6 card small">
             <p>{{ event.description }}</p>
         </div>
-        <div class=" col s6 card">
-            <p>{{ organiser.nom }}  {{ organiser.prenom }}</p>
-            <p>Telephone : {{ organiser.telephone }} </p>
-            <p>Email : {{  organiser.email }}</p>
+        <div class=" col s12 m6 l6 card small">
+            <p>{{ organiser.nom }}  {{ organiser.prenom }}</p><br>
+            <p>Telephone : {{ organiser.telephone }} </p><br>
+            <p>Email : {{  organiser.email }}</p><br>
             {%if organiser.association is defined %}
             <p>Site :<a href="{{ organiser.siteweb }}" >{{  organiser.siteweb }}</a></p>
             {% endif %}
@@ -37,15 +37,19 @@
 
     <div class="row">
         {% for epreuve in tabEpreuve%}
-        <div class="col s4 card">
+        <div class="col s12 m4 l4 card">
             <h6> {{ epreuve.nom }}</h6>
             <p>{{ epreuve.description }} </p>
             <p>Discipline : {{ epreuve.discipline }} </p>
             <p>Date : {{ epreuve.date }} </p>
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
-            <p>Prix : {{ epreuve.prix }} </p>
-
+            <p>Prix : {{ epreuve.prix }}€ </p>
+            {% if epreuve.nb_participants >= epreuve.nb_participants_max   %}
+                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+            {% else %}
+            <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+            {% endif %}
         </div>
 
         {% endfor %}

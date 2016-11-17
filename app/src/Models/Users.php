@@ -12,6 +12,4 @@ class Users extends Model
     public $timestamps = false;
     public $incrementing = false;
 
-
-
 }

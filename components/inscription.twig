@@ -1,0 +1,37 @@
+
+{% if erreur is defined %}
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="center col s6">
+
+                <p>Vous êtes déjà inscrit à cette épreuve</p>
+                <p>Merci et bonne chance !</p>
+                <a class="btn waves-effect waves-light teal lighten-1" href="/"> Accueil</a>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% else %}
+<div class="container">
+
+    <div class="row">
+        <div class="center col s6">
+
+            <p>Votre inscription a bien été prise en compte.</p>
+            <p>Merci et bonne chance !</p>
+            <a class="btn waves-effect waves-light teal lighten-1" href="/">Accueil</a>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endif %}

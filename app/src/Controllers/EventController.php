@@ -66,9 +66,10 @@ final class EventController
     }
 
     public function anEventOrg(Request $request, Response $response,$args){
+        $url = $_SERVER['HTTP_HOST'].substr($_SERVER['PATH_INFO'], 0, 8).substr($_SERVER['PATH_INFO'], 11);
         $event = Events::find($args['id']);
         $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
+        return $this->view->render($response,'anEventOrg.twig', array('url'=>$url, 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
     }
 
     public function anEvent(Request $request, Response $response,$args){
@@ -122,6 +123,11 @@ final class EventController
         return "$jm[2]-$m[0]-$jm[0]";
     }
 
+    private function renderDate($date){
+        $d = explode("-",$date);
+        return "$d[1]/$d[0]/$d[2]";
+    }
+
     public function affichageResultat(Request $request, Response $response,$args) {
         $datas =[];
         $resultats = Results::where('id_epreuve', $args{'id'})->get();
@@ -136,6 +142,29 @@ final class EventController
             array_push($datas, $d);
         }
         return $this->view->render($response,'resultEvent.twig', array('datas' => $datas));
+    }
+
+    public function manage(Request $request, Response $response,$args){
+        if(isset($_SESSION['uniqid']) && isset($_SESSION['type']) && $_SESSION['type'] == 'org'){
+            $e = Events::where('id_organisateur',$_SESSION['uniqid'])->get();
+
+            foreach ($e as $item){
+                $item->date_debut = $this->renderDate($item->date_debut);
+                $item->nb_epreuve = Epreuves::where('id_evenement',$item->id)->count();
+                switch ($item->etat){
+                    case 'nonvalide':
+                        $item->etat = "Non validé";
+                        break;
+                    case 'valide':
+                        $item->etat = "Non validé";
+                        break;
+                }
+            }
+            return $this->view->render($response,'manageEvents.twig', array('events' => $e));
+        }else{
+            return $this->response->withRedirect($this->view->pathFor('homrpage'));
+        }
+
     }
 
 }
