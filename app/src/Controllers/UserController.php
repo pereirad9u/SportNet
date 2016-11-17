@@ -283,6 +283,58 @@ final class UserController
 
     public function profil(Request $request, Response $response, $args)
     {
+        if ($_SESSION['type'] == 'user') {
+            $u = Users::find($_SESSION['uniqid']);
+            $org = false;
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves join users_epreuves join users 
+                                  where users.id=users_epreuves.id_users 
+                                  and users_epreuves.id_epreuves=epreuves.id 
+                                  and epreuves.id_evenement=events.id
+                                  and users.id='".$_SESSION['uniqid']."'
+                                  order by events.date_debut desc");
+            $interessant = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                            from events join epreuves 
+                                            where events.id = epreuves.id_evenement
+                                            and events.etat = 'ouvertes'
+                                            and epreuves.discipline = (select discipline
+                                                                       from epreuves join users_epreuves
+                                                                       where epreuves.id = users_epreuves.id_epreuves
+                                                                       and users_epreuves.id_users = '". $_SESSION['uniqid'] ."'
+                                                                       GROUP by discipline
+                                                                       having count(discipline) >= (select COUNT(discipline) from epreuves join users_epreuves 
+                                                                                  where epreuves.id = users_epreuves.id_epreuves
+                                                                                  and users_epreuves.id_users = '". $_SESSION['uniqid'] ."')
+                                                                      )
+                                            ");
+            $r = Results::where('id_utilisateur', $_SESSION['uniqid'])
+                ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
+                ->join('events', 'events.id', '=', 'epreuves.id_evenement')
+                ->orderBy('events.date_fin')
+                ->get(array('*', 'events.nom as nomE', 'epreuves.nom as nom'));
+            foreach ($r as $res) {
+                $res->date = $this->renderDate($res->date);
+            }
+        } else {
+            $u = Organisers::find($_SESSION['uniqid']);
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves
+                                  where epreuves.id_evenement=events.id
+                                  and events.id_organisateur='".$_SESSION['uniqid']."'
+                                  order by events.date_debut desc");
+            $org = true;
+        }
+        foreach ($e as $event) {
+            $event->date_debut = $this->renderDate($event->date_debut);
+        }
+        $this->view->render($response, 'profil.twig', array('interessant' => $interessant, 'user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+    }
+
+    public function profilUser(Request $request, Response $response, $args)
+    {
+        if($_SESSION['uniqid'] == $args['id']) {
+            return $response->withRedirect($this->router->pathFor('profil'));
+        }
         $u = Users::find($args['id']);
         if ($u != null) {
             $org = false;
@@ -296,13 +348,29 @@ final class UserController
             $r = Results::where('id_utilisateur', $args['id'])
                 ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
                 ->join('events', 'events.id', '=', 'epreuves.id_evenement')
+                ->orderBy('events.date_fin')
                 ->get(array('*', 'events.nom as nomE', 'epreuves.nom as nom'));
-
+            foreach ($r as $res) {
+                $res->date = $this->renderDate($res->date);
+            }
         } else {
             $u = Organisers::find($args['id']);
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves
+                                  where epreuves.id_evenement=events.id
+                                  and events.id_organisateur='".$args['id']."'
+                                  order by events.date_debut desc");
             $org = true;
         }
-        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+        foreach ($e as $event) {
+            $event->date_debut = $this->renderDate($event->date_debut);
+        }
+        $this->view->render($response, 'profilUser.twig', array('user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+    }
+
+    private function renderDate($date){
+        $d = explode("-",$date);
+        return "$d[2]/$d[1]/$d[0]";
     }
 
     public function upload_resultat(Request $request, Response $response, $args){
