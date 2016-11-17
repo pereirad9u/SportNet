@@ -1,0 +1,23 @@
+
+
+<div class="container">
+  <div class="row">
+  {% if prix_total >= 0 %}
+  <div class="col s5 offset-s2">
+    <ul>
+    {% for elem in elements %}
+      <li class="collection-item dismissable"><div>{{elem.nom}} -- Prix : {{elem.prix}} €<a href="/delElemPanier/{{elem.id}}" class="secondary-content"><i class="material-icons">delete</i></a></div></li>
+    {% endfor %}
+    </ul>
+    <h5>{{ prix_total }} €</h5>
+    <a class="btn waves-effect waves-light" href="/inscriptionall">Règler vos inscriptions
+      <i class="material-icons right">send</i>
+    </a>
+  </div>
+  {% else %}
+    <div class="row">
+      <h5>Votre panier est vide.</h5>
+    </div>
+  {% endif %}
+  </div>
+</div>
