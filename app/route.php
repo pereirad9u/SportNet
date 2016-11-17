@@ -49,6 +49,8 @@ $app->get('/profil/{id}', 'App\Controllers\UserController:profil')->setName('pro
 
 $app->get('/manageEvents', 'App\Controllers\EventController:manage')->setName('manage');
 
+$app->get('/search', 'App\Controllers\HomeController:search')->setName('search');
+
 $app->get('/addpanier/{id}','App\Controllers\UserController:addPanier')->setName('addpanier');
 
 $app->get('/panier','App\Controllers\UserController:panier')->setName('panier');

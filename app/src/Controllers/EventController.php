@@ -125,7 +125,9 @@ final class EventController
 
     private function renderDate($date){
         $d = explode("-",$date);
-        return "$d[1]/$d[0]/$d[2]";
+
+        return "$d[2]/$d[1]/$d[0]";
+
     }
 
     public function affichageResultat(Request $request, Response $response,$args) {
