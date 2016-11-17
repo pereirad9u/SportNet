@@ -7,6 +7,8 @@ use App\Models\Events;
 use App\Models\Organisers;
 use App\Models\UserEpreuve;
 use App\Models\Users;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -267,34 +269,19 @@ final class UserController
         $u = Users::find($args['id']);
         if ($u != null) {
             $org = false;
-            $epreuveUser = [];
-            $tabEvent = [];
-            $uepreuve = UserEpreuve::where('id_users','=',$args['id'])->get();
-            foreach ($uepreuve as $t){
-                $e = Epreuves::find($t->id_epreuves);
-                if(!in_array($e->id_evenement,$tabEvent)){
-                    $event = Events::find($e->id_evenement);
-                    $tabEvent[$event->id] = $event->date_debut;
-                }
-            }
-            var_dump($tabEvent);
-
-            /*
-            $epreuves = Epreuves::all();
-            $epreuves->filter(function($epreuve) use ($uepreuve) {
-                $e = [];
-                for($x=0; $x <= sizeof($uepreuve); $x++) {
-                    if (in_array($epreuve->id, $uepreuve))
-                        echo "bonjour";
-                }
-            });*/
-        //die();
+            $e = Manager::select("select *
+                                  from events join epreuves join users_epreuves join users 
+                                  where users.id=users_epreuves.id_users 
+                                  and users_epreuves.id_epreuves=epreuves.id 
+                                  and epreuves.id_evenement=events.id
+                                  and users.id='".$args['id']."'
+                                  order by events.date_debut desc");
         } else {
             $u = Organisers::find($args['id']);
             $org = true;
         }
 
-        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org));
+        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org, 'events' => $e));
     }
 
     public function upload_resultat(Request $request, Response $response, $args){
