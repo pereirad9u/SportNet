@@ -12,5 +12,8 @@ class User extends Model
     public $timestamps = false;
     public $incrementing = false;
 
+    function epreuves(){
+       return $this->belongsToMany('App\Models\Epreuves');
+    }
 
 }

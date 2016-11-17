@@ -10,6 +10,8 @@ namespace App\Controllers;
 
 use App\Models\Epreuves;
 use App\Models\Events;
+use App\Models\UserEpreuve;
+use App\Models\User;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -133,6 +135,19 @@ class EpreuveController
         $event->save();
         $url = $this->router->pathfor('anEventOrg',['id' =>$args['id']]);
         return $response->withStatus(302)->withHeader('Location',$url);
+    }
+
+    public function participants(Request $request, Response $response, $args){
+      $epreuve = Epreuves::find($args['id']);
+      $event = Events::find($epreuve->id_evenement);
+      $tabUserEpreuve = UserEpreuve::where('id_epreuves','like',$args['id'])->get();
+      $tabParticipants = array();
+      foreach ($tabUserEpreuve as $u){
+        $user = User::where('id','like',$u->id_users)->first();
+        $user->doss = $u->num_dossard;
+        array_push($tabParticipants, $user);
+      }
+      return $this->view->render($response,'participants.twig', array( 'event' => $event , 'epreuve'=> $epreuve , 'tabParticipants' => $tabParticipants ));
     }
 
     private function modifDate($date) {
