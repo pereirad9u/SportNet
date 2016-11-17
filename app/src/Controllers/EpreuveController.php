@@ -147,6 +147,26 @@ class EpreuveController
         $user->doss = $u->num_dossard;
         array_push($tabParticipants, $user);
       }
+
+      $tab_csv = array(array('Nom','Prénom','Adresse email', 'Téléphone', 'Numéro de dossard'));
+
+      foreach ($tabParticipants as $p) {
+        if ($p->telephone != ""){
+          $telephone = $p->telephone;
+        }else{
+          $telephone = 'non transmis';
+        }
+        array_push($tab_csv,array($p->nom, $p->prenom, $p->email, $telephone, $p->num_dossard));
+
+      }
+
+      $csv = new \SplFileObject('participantscsv/'.$args['id'].'participants.csv', 'w');
+
+      foreach ($tab_csv as $ligne) {
+          $csv->fputcsv($ligne, ';');
+      }
+
+
       return $this->view->render($response,'participants.twig', array( 'event' => $event , 'epreuve'=> $epreuve , 'tabParticipants' => $tabParticipants ));
     }
 
