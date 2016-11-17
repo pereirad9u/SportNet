@@ -7,6 +7,8 @@ use App\Models\Organisers;
 use App\Models\UserEpreuve;
 use App\Models\Users;
 use App\Models\Events;
+use App\Models\Groups;
+use App\Models\UserGroup;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -368,28 +370,52 @@ final class UserController
     }
 
     public function addPanier(Request $request, Response $response, $args){
+      if (!isset($_SESSION['panier'])){
+        $_SESSION['panier'] = array();
+      }
       $e = Epreuves::find($args['id']);
       array_push($_SESSION['panier'],$e);
-      //$_SESSION['panier'][sizeof($_SESSION['panier'])+1] = $e;
       $event = Events::find($e->id_evenement);
       $organiser = Organisers::find($event->id_organisateur);
       $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
       return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
     }
 
-    public function panier(Request $request, Response $response, $args){
-      if (isset($_SESSION['panier'])){
-        $prix_total = 0;
-        foreach ($_SESSION['panier'] as $elem) {
-          $prix_total = $prix_total + $elem->prix;
-        }
-        return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
-      }else{
-        return $response->withRedirect($this->router->pathFor('homepage'));
+    public function addPanierGroup(Request $request, Response $response, $args){
+      if (!isset($_SESSION['panier'])){
+        $_SESSION['panier'] = array();
       }
+      $epreuve = Epreuves::find($args['idepreuve']);
+      foreach (UserGroup::where('id_group','=',$args['idgroupe']) as $membres) {
+        $new_epreuve = new Epreuves();
+
+        $new_epreuve = $epreuve;
+
+
+        $new_epreuve->id_participant = $membres->id_utilisateur;
+        array_push($_SESSION['panier'],$e);
+      }
+      $epreuve->id_participant = $_SESSION['uniqid'];
+      array_push($_SESSION['panier'],$epreuve);
+      //$e->prix = $e->prix * UserGroup::where('id_group','=',$args['idgroup'])->count();
+      //array_push($_SESSION['panier'],$e);
+      $event = Events::find($epreuve->id_evenement);
+      $organiser = Organisers::find($event->id_organisateur);
+      $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+    }
+
+    public function panier(Request $request, Response $response, $args){
+      $prix_total = 0;
+      foreach ($_SESSION['panier'] as $elem) {
+        $prix_total = $prix_total + $elem->prix;
+      }
+      return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
     }
 
     public function delelempanier(Request $request, Response $response, $args){
+      /**
+      $tab = array();
       foreach ($_SESSION['panier'] as $value) {
         if($value->id_epreuves != $args['id']){
           array_push($tab, $value);
@@ -402,18 +428,51 @@ final class UserController
         array_push($_SESSION['panier'], $new_value);
         $prix_total = $prix_total + $new_value->prix;
       }
+      */
+      foreach ($_SESSION['panier'] as $key=>$value) {
+        if($value->id_epreuves == $args['id']){
+          unset($_SESSION['panier'][$key]);
+        }
+      }
       return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
     }
 
     public function inscriptionall(Request $request, Response $response, $args){
       foreach($_SESSION['panier'] as $epreuve){
         $e = new UserEpreuve();
-        $e->id_users = $_SESSION['uniqid'];
+        $e->id_users = $epreuve->id_participant;
         $e->id_epreuves = $epreuve->id;
         $e->num_dossard = UserEpreuve::where('id_epreuves','=',$epreuve->id)->max('num_dossard') + 1;
         $e->save();
       }
-      unset($_SESSION['panier']);
+      $_SESSION['panier'] = array();
+      return $response->withRedirect($this->router->pathFor('homepage'));
+    }
+
+    public function creategroup(Request $request, Response $response, $args){
+      return $this->view->render($response, 'creategroup.twig');
+    }
+
+    public function addgroup(Request $request, Response $response, $args){
+      $nom_group = $_POST['name_group'];
+      $new_group = new Groups();
+      $new_group->id = uniqid();
+      $new_group->nom = $nom_group;
+      $new_group->id_responsable = $_SESSION['uniqid'];
+
+      $tab_adherent = array();
+      foreach ($_POST['email_adherents'] as $adherent){
+        if (Users::where('email','=',$adherent)->count() > 0){
+          $new_adherent = new UserGroup();
+          $new_adherent->id_utilisateur = Users::where('email','=',$adherent)->first()->id;
+          $new_adherent->id_group = $new_group->id;
+          array_push($tab_adherent, $new_adherent);
+        }
+      }
+      $new_group->save();
+      foreach ($tab_adherent as $adherent) {
+        $adherent->save();
+      }
       return $response->withRedirect($this->router->pathFor('homepage'));
     }
 }

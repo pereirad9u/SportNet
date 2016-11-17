@@ -131,7 +131,7 @@ class EpreuveController
         }
 
         $event = Events::find($args['id']);
-        $event->etat = "ouvertes";
+        $event->etat = "ouvert";
         $event->save();
         $url = $this->router->pathfor('anEventOrg',['id' =>$args['id']]);
         return $response->withStatus(302)->withHeader('Location',$url);
