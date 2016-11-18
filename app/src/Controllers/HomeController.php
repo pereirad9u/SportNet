@@ -8,8 +8,6 @@ use App\Models\Epreuves;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Sirius\Validation\Rule\Date;
-use Sirius\Validation\Rule\DateTime;
 
 final class HomeController
 {
