@@ -37,7 +37,7 @@
 
     <div class="row">
         {% for epreuve in tabEpreuve%}
-        <div class="col s12 m4 l4 card">
+        <div class="col s12 m4 l4 card small">
             <h6> {{ epreuve.nom }}</h6>
             <p>{{ epreuve.description }} </p>
             <p>Discipline : {{ epreuve.discipline }} </p>
@@ -45,11 +45,13 @@
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
             <p>Prix : {{ epreuve.prix }}€ </p>
+            <div class="center" >
             {% if epreuve.nb_participants >= epreuve.nb_participants_max   %}
-                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+                <a class="center btn waves-effect waves-light teal lighten-1 inscription"  id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
             {% else %}
-            <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+            <a class="center btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
             {% endif %}
+            </div>
         </div>
 
         {% endfor %}

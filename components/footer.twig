@@ -1,5 +1,5 @@
 </main>
-<footer class="page-footer teal"  id="footer" >
+<footer class="page-footer teal" id="footer">
     <div class="container">
         <div id="footer_row" class="row">
             <div class="col l6 s12">
@@ -14,7 +14,6 @@
 <script type="text/javascript" src="/css/materialize/js/materialize.js"></script>
 <script type="text/javascript" src="/JS/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/JS/jquery.validate.js"></script>
-<script type="text/javascript" src="/JS/epreuves.js"></script>
 
 <script>
     $('.parallax').parallax();
@@ -23,20 +22,79 @@
 <script type="text/javascript" src="/JS/inscription.js"></script>
 <script type="text/javascript" src="/JS/ajoutEpreuve.js"></script>
 <script>
-    $('.button-collapse').sideNav();
-    $('.carousel.carousel-slider').carousel({
-        full_width: true,
-        time_constant: 100
-    });
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 90 // Creates a dropdown of 15 years to control year
-    });
+    $(document).ready(function () {
+        $('.button-collapse').sideNav();
+        $('.carousel.carousel-slider').carousel({
+            full_width: true,
+            time_constant: 100
+        });
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 90 // Creates a dropdown of 15 years to control year
+        });
 
-    $(document).ready(function(){
+
         $('.carousel').carousel();
         $('.modal').modal();
         $('#modal1').modal('open');
+
+        $('.add_filtre').on('click', function (e) {
+            e.preventDefault();
+            switch ($(this).attr('id')) {
+                case "date":
+                    $("#input_date").show();
+                    $('#date').hide();
+                    $('#suppr_date').show();
+                    break;
+                case "lieu":
+                    $("#input_lieu").show();
+                    $('#suppr_lieu').show();
+                    $('#lieu').hide();
+                    $("input[name='lieu']").attr('value','');
+                    break;
+                case "discipline":
+                    $("#input_discipline").show();
+                    $('#suppr_discipline').show();
+                    $('#discipline').hide();
+                    $("input[name='discipline']").attr('value','');
+                    break;
+            }
+            $(this).parent().hide();
+
+        });
+
+        $('#suppr_discipline').on('click', function (e) {
+            e.preventDefault();
+            $('#input_discipline').hide();
+            $('#suppr_discipline').hide();
+            $('#discipline').parent().show();
+            $('#discipline').show();
+            $("input[name='discipline']").attr('value','');
+
+
+        });
+
+        $('#suppr_lieu').on('click', function (e) {
+            e.preventDefault();
+            $('#input_lieu').hide();
+            $('#suppr_lieu').hide();
+            $('#lieu').parent().show();
+            $('#lieu').show();
+            $("input[name='lieu']").attr('value','');
+
+
+        });
+
+        $('#suppr_date').on('click', function (e) {
+            e.preventDefault();
+            $('#input_date').hide();
+            $('#suppr_date').hide();
+            $('#date').parent().show();
+            $('#date').show();
+            $("input[name='date']").attr('value','');
+
+        });
+
     });
 
 </script>
