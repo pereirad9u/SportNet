@@ -293,27 +293,36 @@ final class UserController
         if ($_SESSION['type'] == 'user') {
             $u = Users::find($_SESSION['uniqid']);
             $org = false;
-            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+            $events = Manager::select("select distinct events.*
                                   from events join epreuves join users_epreuves join users
                                   where users.id=users_epreuves.id_users
                                   and users_epreuves.id_epreuves=epreuves.id
                                   and epreuves.id_evenement=events.id
                                   and users.id='".$_SESSION['uniqid']."'
                                   order by events.date_debut desc");
-            $interessant = Manager::select("select *, count(epreuves.id) as nb_epreuve
+
+            foreach ($events as $event) {
+                $event->nb_epreuve = Epreuves::where('id_evenement', '=', $event->id)->count();
+            }
+
+            $interessant = Manager::select("select distinct events.* 
                                             from events join epreuves
                                             where events.id = epreuves.id_evenement
-                                            and events.etat = 'ouvertes'
-                                            and epreuves.discipline = (select discipline
-                                                                       from epreuves join users_epreuves
-                                                                       where epreuves.id = users_epreuves.id_epreuves
-                                                                       and users_epreuves.id_users = '". $_SESSION['uniqid'] ."'
-                                                                       GROUP by discipline
-                                                                       having count(discipline) >= (select COUNT(discipline) from epreuves join users_epreuves
-                                                                                  where epreuves.id = users_epreuves.id_epreuves
-                                                                                  and users_epreuves.id_users = '". $_SESSION['uniqid'] ."')
+                                            and epreuves.discipline = (select disc.discipline
+                                                                       from (select discipline, COUNT(discipline) as count
+                                                                             from epreuves join users_epreuves
+                                                                             where epreuves.id = users_epreuves.id_epreuves
+                                                                             and users_epreuves.id_users = '" . $_SESSION['uniqid'] . "'
+                                                                             group by discipline) disc
+                                                                       GROUP by discipline asc
+                                                                       having max(disc.count)
+                                                                       limit 1
                                                                       )
                                             ");
+            foreach ($interessant as $i) {
+                $i->nb_epreuve = Epreuves::where('id_evenement', '=', $i->id)->count();
+            }
+            //die(var_dump($interessant));
             $r = Results::where('id_utilisateur', $_SESSION['uniqid'])
                 ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
                 ->join('events', 'events.id', '=', 'epreuves.id_evenement')
@@ -324,17 +333,20 @@ final class UserController
             }
         } else {
             $u = Organisers::find($_SESSION['uniqid']);
-            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+            $events = Manager::select("select *
                                   from events join epreuves
                                   where epreuves.id_evenement=events.id
                                   and events.id_organisateur='".$_SESSION['uniqid']."'
                                   order by events.date_debut desc");
+            foreach ($events as $event) {
+                $event->nb_epreuve = Epreuves::where('id_evenement', '=', $event->id)->count();
+            }
             $org = true;
         }
-        foreach ($e as $event) {
+        foreach ($events as $event) {
             $event->date_debut = $this->renderDate($event->date_debut);
         }
-        $this->view->render($response, 'profil.twig', array('interessant' => $interessant, 'user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+        $this->view->render($response, 'profil.twig', array('interessant' => $interessant, 'user' => $u, 'isOrg' => $org, 'events' => $events, 'results' => $r));
     }
 
     public function profilUser(Request $request, Response $response, $args)
@@ -438,6 +450,17 @@ final class UserController
                 }
                 if ($ajout){
                     $event->nb_participants++;
+                    $event->save();
+                }
+                $events = Events::all();
+                foreach ($events as $event) {
+                    $nb = Manager::select("SELECT COUNT(DISTINCT id_users) as nb_participant
+                                                        from users_epreuves 
+                                                        join epreuves join events 
+                                                        where users_epreuves.id_epreuves=epreuves.id 
+                                                        and epreuves.id_evenement=events.id 
+                                                        and events.id='". $event->id ."';");
+                    $event->nb_participants = $nb[0]->nb_participant;
                     $event->save();
                 }
                 return $this->view->render($response,'inscription.twig');
@@ -574,9 +597,19 @@ final class UserController
         $e->id_epreuves = $epreuve->id;
         $e->num_dossard = UserEpreuve::where('id_epreuves','=',$epreuve->id)->max('num_dossard') + 1;
         $e->save();
-
       }
       $_SESSION['panier'] = array();
+        $events = Events::all();
+        foreach ($events as $event) {
+            $nb = Manager::select("SELECT COUNT(DISTINCT id_users) as nb_participant
+                                                        from users_epreuves 
+                                                        join epreuves join events 
+                                                        where users_epreuves.id_epreuves=epreuves.id 
+                                                        and epreuves.id_evenement=events.id 
+                                                        and events.id='". $event->id ."';");
+            $event->nb_participants = $nb[0]->nb_participant;
+            $event->save();
+        }
       return $response->withRedirect($this->router->pathFor('homepage'));
     }
 
