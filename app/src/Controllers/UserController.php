@@ -322,7 +322,6 @@ final class UserController
             foreach ($interessant as $i) {
                 $i->nb_epreuve = Epreuves::where('id_evenement', '=', $i->id)->count();
             }
-            //die(var_dump($interessant));
             $r = Results::where('id_utilisateur', $_SESSION['uniqid'])
                 ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
                 ->join('events', 'events.id', '=', 'epreuves.id_evenement')
@@ -357,13 +356,16 @@ final class UserController
         $u = Users::find($args['id']);
         if ($u != null) {
             $org = false;
-            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+            $e = Manager::select("select DISTINCT events.*
                                   from events join epreuves join users_epreuves join users
                                   where users.id=users_epreuves.id_users
                                   and users_epreuves.id_epreuves=epreuves.id
                                   and epreuves.id_evenement=events.id
                                   and users.id='".$args['id']."'
                                   order by events.date_debut desc");
+            foreach ($e as $event) {
+                $event->nb_epreuve = Epreuves::where('id_evenement', '=', $event->id)->count();
+            }
             $r = Results::where('id_utilisateur', $args['id'])
                 ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
                 ->join('events', 'events.id', '=', 'epreuves.id_evenement')
@@ -374,12 +376,14 @@ final class UserController
             }
         } else {
             $u = Organisers::find($args['id']);
-            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+            $e = Manager::select("select DISTINCT events.*
                                   from events join epreuves
                                   where epreuves.id_evenement=events.id
                                   and events.id_organisateur='".$args['id']."'
                                   order by events.date_debut desc");
-
+            foreach ($e as $event) {
+                $event->nb_epreuve = Epreuves::where('id_evenement', '=', $event->id)->count();
+            }
             $org = true;
         }
         foreach ($e as $event) {
