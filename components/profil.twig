@@ -8,6 +8,8 @@
             {% if isOrg %}
                 <p>Association : {{ user.nom_association }}</p>
                 <p>Site web : <a href="http://{{ user.siteweb }}">{{ user.siteweb }}</a></p>
+            {% else %}
+              <a href="/creategroup"  class="btn waves-effect waves-light" >Créer un groupe <i class="material-icons right">send</i></a>
             {% endif %}
         </div>
     </div>
