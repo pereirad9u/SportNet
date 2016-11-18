@@ -64,6 +64,7 @@ final class HomeController
     {
         if (isset($_GET['recherche']) && $_GET['recherche'] != "") {
             $recherche = $_GET['recherche'];
+
             $events = Events::where('nom', 'like', '%' . $recherche . '%')->where('etat','!=','nonvalide');
             if (isset($_GET['date']) && $_GET['date'] != "") {
                 $events->where('date_debut','<=',$_GET['date'])->where('date_fin','>=',$_GET['date']);
