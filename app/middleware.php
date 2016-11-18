@@ -37,7 +37,7 @@ $app->add(function ($request, $response, $next) {
                 $this->view->render($response,'header.twig',['org'=>$o]);
             }else{
                 $u = Users::find($_SESSION['uniqid']);
-                $this->view->render($response,'header.twig',['user'=>$u]);
+                $this->view->render($response,'header.twig',['user'=>$u, 'nb_panier'=>sizeof($_SESSION['panier'])]);
             }
 
         }else{

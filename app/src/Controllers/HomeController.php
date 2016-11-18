@@ -44,17 +44,17 @@ final class HomeController
                         break;
                 }
 
-                $last_events = Events::where('date_fin','<',date('Y-m-d'))->orderBy('date_fin')->get();
+                $last_events = Events::where('date_fin', '<', date('Y-m-d'))->orderBy('date_fin')->get();
                 $i = 0;
                 $tabLastEvents = array();
                 foreach ($last_events as $last_ev) {
-                  $i++;
-                  array_push($tabLastEvents,$last_ev);
-                  if ($i==3)
-                    break;
+                    $i++;
+                    array_push($tabLastEvents, $last_ev);
+                    if ($i == 3)
+                        break;
 
                 }
-                $this->view->render($response, 'hello_org.twig',['e'=>$event, 'last_events'=>$tabLastEvents]);
+                $this->view->render($response, 'hello_org.twig', ['e' => $event, 'last_events' => $tabLastEvents]);
             } else {
                 $user = Users::find($_SESSION['uniqid']);
                 $this->view->render($response, 'hello_user.twig');
@@ -70,39 +70,57 @@ final class HomeController
 
     public function search(Request $request, Response $response, $args)
     {
-        if (isset($_GET['recherche']) && $_GET['recherche'] != "") {
-            $recherche = $_GET['recherche'];
-
-            $events = Events::where('nom', 'like', '%' . $recherche . '%')->where('etat','!=','nonvalide');
+        if (isset($_GET['recherche']) || isset($_GET['date']) || isset($_GET['lieu'])){
+            $events =Events::where('etat', '!=', 'nonvalide');
+            if (isset($_GET['recherche'])) {
+                $recherche = $_GET['recherche'];
+                $events->where('nom', 'like', '%'.$recherche.'%');
+            }
             if (isset($_GET['date']) && $_GET['date'] != "") {
-                $events->where('date_debut','<=',$_GET['date'])->where('date_fin','>=',$_GET['date']);
+                $events->where('date_debut', '<=', $_GET['date'])->where('date_fin', '>=', $_GET['date']);
             }
             if (isset($_GET['lieu']) && $_GET['lieu'] != "") {
-                $events->where('lieu','like',$_GET['lieu']);
-
+                $events->where('lieu', 'like', $_GET['lieu']);
             }
-            if (isset($_GET['discipline']) && $_GET['discipline'] != "") {
-                $events->where('lieu','like',$_GET['discipline']);
+        }else{
+            $events =Events::where('etat', '!=', 'nonvalide');
+        }
+        $events = $events->get();
+        if (isset($_GET['discipline']) && $_GET['discipline'] != "") {
+            $epreuves = Epreuves::where('discipline',$_GET['discipline'])->get();
+            $temp_events = array();
+            foreach ($epreuves as $epreuve){
+                foreach ($events as $event){
 
+                    echo '<pre>';
+                    var_dump($epreuve->id);
+                    echo '</pre>';
 
-            }
-            $events = $events->get();
-            foreach ($events as $event) {
-                $event->date_debut = $this->renderDate($event->date_debut);
-                $event->nb_epreuve = Epreuves::where('id_evenement', $event->id)->count();
-                switch ($event->etat) {
-                    case 'nonvalide':
-                        $event->etat = "Non validé";
-                        break;
-                    case 'valide':
-                        $event->etat = "Non validé";
-                        break;
+                    echo '<pre>';
+                    var_dump($event->id);
+                    echo '</pre>';
+                    if ($event->id == $epreuve->id_evenement){
+                        array_push($temp_events,$event);
+                    }
                 }
             }
-            return $this->view->render($response, 'search.twig', ['recherche' => $recherche, 'events' => $events,'get'=> $_GET]);
 
+            $events = array_unique($temp_events);
         }
-        return $this->view->render($response, 'search.twig');
+        foreach ($events as $event) {
+            $event->date_debut = $this->renderDate($event->date_debut);
+            $event->nb_epreuve = Epreuves::where('id_evenement', $event->id)->count();
+            switch ($event->etat) {
+                case 'nonvalide':
+                    $event->etat = "Non validé";
+                    break;
+                case 'valide':
+                    $event->etat = "Non validé";
+                    break;
+            }
+        }
+        return $this->view->render($response, 'search.twig', ['events' => $events, 'get' => $_GET]);
+
 
     }
 }
