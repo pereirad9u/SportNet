@@ -40,12 +40,9 @@ final class UserController
     }
 
     public function signupUser(Request $request, Response $response, $args){
-<<<<<<< HEAD
-            return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
-=======
 
-      return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
->>>>>>> e09fb62f75665fed4423a68df04b57f22b402d69
+            return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+
     }
 
     public function addMemberOrg(Request $request, Response $response, $args) {
@@ -179,7 +176,7 @@ final class UserController
                     $m->save ();
 
                     $_SESSION['uniqid']=$m->id;
-                    $_SESSION['type']='user';''
+                    $_SESSION['type']='user';
 
                     if(isset($_SESSION['route'])){
                         $r = $_SESSION['route'];

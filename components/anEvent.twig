@@ -45,7 +45,7 @@
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
             <p>Prix : {{ epreuve.prix }}€ </p>
-            {% if epreuve.nb_participants >= epreuve.nb_participants_max   %}
+            {% if epreuve.nb_participants >= epreuve.nb_participants_max or epreuve.inscription==0   %}
                 <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
             {% else %}
             <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
