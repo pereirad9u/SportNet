@@ -455,6 +455,7 @@ final class UserController
       }
       $e = Epreuves::find($args['id']);
       $e->id_elem = uniqid();
+      $e->id_participant = $_SESSION['uniqid'];
       $e->nom_participant = Users::find($_SESSION['uniqid'])->nom;
       $e->prenom_participant = Users::find($_SESSION['uniqid'])->prenom;
       array_push($_SESSION['panier'],$e);
