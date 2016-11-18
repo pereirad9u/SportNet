@@ -22,13 +22,13 @@
 
                     <span class="card-title">{{ e.nom }}</span>
                     <p>Date : {{ e.date_debut }}</p>
-                    <p>Nombre participant : {{ e.nb_participant}}</p>
+                    <p>Nombre participant : {{ e.nb_participants}}</p>
                     <p>Nombre d'épreuves : {{e.nb_epreuve}}</p>
                     <p>Etat : {{e.etat}}</p>
 
                 </div>
                 <div class="card-action">
-                    <a href="/anEventOrg">Gérer</a>
+                    <a href="/anEventOrg/{{ e.id }}">Gérer</a>
                 </div>
             </div>
         </div>

@@ -1,1 +1,158 @@
-Recherche
+<div class="container">
+    {% if recherche is defined %}
+        <form method="get" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label> Rechercher un évènement :</label>
+                    <input type="text" name="recherche" value="{{ recherche }}" required></div>
+            </div>
+            <div id="filter" class="row">
+                {% if get.date is defined and get.date != "" %}
+                    <div class="input-field col s4 " id="input_date"><input name="date" type="text"
+                                                                            placeholder="YYYY-MM-DD"
+                                                                            value="{{ get.date }}" class="validate">
+                        <label for="date">Date</label></div>
+                {% else %}
+                    <div class="input-field col s4 " id="input_date" style="display: none"><input name="date"
+                                                                                                  type="text"
+                                                                                                  placeholder="YYYY-MM-DD"
+                                                                                                  value="{{ get.date }}"
+                                                                                                  class="validate">
+                        <label for="date">Date</label></div>
+
+                {% endif %}
+                {% if get.lieu is defined and get.lieu != "" %}
+                    <div class="input-field col s4 " id="input_lieu"><input name="lieu" type="text"
+                                                                            value="{{ get.lieu }}" class="validate">
+                        <label for="lieu">Lieu</label></div>
+                {% else %}
+                    <div class="input-field col s4 " style="display: none" id="input_lieu"><input name="lieu"
+                                                                                                  type="text"
+                                                                                                  value="{{ get.lieu }}"
+                                                                                                  class="validate">
+                        <label for="lieu">Lieu</label></div>
+
+                {% endif %}
+                {% if get.discipline is defined and get.discipline != "" %}
+                    <div class="input-field col s4" id="input_discipline"><input name="discipline" type="text"
+                                                                                 value="{{ get.discipline }}"
+                                                                                 class="validate">
+                        <label for="discipline">Discipline</label></div>
+                {% else %}
+                    <div class="input-field col s4" id="input_discipline" style="display: none"><input
+                                name="discipline"
+                                type="text"
+                                value="{{ get.discipline }}"
+                                class="validate">
+                        <label
+                                for="discipline">Discipline</label></div>
+                {% endif %}
+
+
+            </div>
+            {% if get.date is defined and get.date != "" %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%"
+                        data-activates="dropdown" id="suppr_date">Date<i
+                            class="material-icons left">delete</i></button>
+            {% else %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%;display: none"
+                        data-activates="dropdown" id="suppr_date">Date<i
+                            class="material-icons left">delete</i></button>
+            {% endif %}
+            {% if get.lieu is defined and get.lieu != "" %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%"
+                        data-activates="dropdown" id="suppr_lieu">Lieu<i
+                            class="material-icons left">delete</i></button>
+            {% else %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%;display: none"
+                        data-activates="dropdown" id="suppr_lieu">Lieu<i
+                            class="material-icons left">delete</i></button>
+            {% endif %}
+
+            {% if get.discipline is defined and get.discipline != "" %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%"
+                        data-activates="dropdown" id="suppr_discipline">Discipline<i
+                            class="material-icons left">delete</i></button>
+            {% else %}
+                <button class="btn red center waves-effect waves-light suppr" style="margin: 2%;display: none"
+                        data-activates="dropdown" id="suppr_discipline">Discipline<i
+                            class="material-icons left">delete</i></button>
+            {% endif %}
+
+
+            <button class="dropdown-button btn center" data-activates="dropdown" id="add">Ajouter filtre <i
+                        class="material-icons right">add</i></button>
+            <button class="btn waves-effect waves-light">rechercher</button>
+
+        </form>
+        {% if events|length > 0 %}
+
+            <div class="row">
+                {% for event in events %}
+                    <div class="card blue-grey darken-1 col s12 m5 l5 offset-m4 offset-l4">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{ event.nom }}</span>
+                            <p>Date : {{ event.date_debut }}</p>
+                            <p>Nombre participant : {{ event.nb_participants }}</p>
+                            <p>Nombre d'épreuves : {{ event.nb_epreuve }}</p>
+                            <p>Etat : {{ event.etat }}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="/anEvent/{{ event.id }}">Voir</a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col s12 m4 l6 offset-l3 center">
+                    <br>
+                    <br>
+                    <div class="card-panel"><h5>Aucun résultat pour : {{ recherche }},  {% if get.discipline is defined and get.discipline != "" %} en {{ get.discipline }} {% endif %}  {% if get.lieu is defined and get.lieu != "" %}à {{ get.lieu }}{% endif %} {% if get.date is defined and get.date != "" %}le {{ get.date }}{% endif %} </h5></div>
+
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <form method="get" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label> Rechercher un évènement :</label>
+                    <input type="text" name="recherche" value="{{ recherche }}" required></div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col s12 m4 l6 offset-l3 center">
+                <br>
+                <br>
+                <div class="card-panel"><h5>Aucune recherche éffectué</h5></div>
+
+            </div>
+        </div>
+    {% endif %}
+    <ul id="dropdown" class="dropdown-content ">
+        {% if get.date is not defined or get.date == "" %}
+            <li><a href="" id="date" class="teal-text add_filtre">Date</a></li>
+            <li class="divider teal"></li>
+        {% else %}
+            <li style="display: none"><a href="" id="date" class="teal-text add_filtre">Date</a></li>
+            <li class="divider teal"></li>
+        {% endif %}
+        {% if get.discipline is not defined or get.discipline == "" %}
+            <li><a href="" id="discipline" class="teal-text add_filtre">Discipline</a></li>
+            <li class="divider teal"></li>
+        {% else %}
+            <li style="display: none"><a href="" id="discipline" class="teal-text add_filtre">Discipline</a></li>
+            <li class="divider teal"></li>
+        {% endif %}
+        {% if get.lieu is not defined or get.lieu == "" %}
+            <li><a href="" id="lieu" class="teal-text add_filtre">Lieu</a></li>
+        {% else %}
+            <li style="display: none"><a href="" id="lieu" class="teal-text add_filtre">Lieu</a></li>
+
+        {% endif %}
+
+
+    </ul>
+</div>
