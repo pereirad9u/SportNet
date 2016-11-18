@@ -466,12 +466,19 @@ final class UserController
       }
       $e = Epreuves::find($args['id']);
       $e->id_elem = uniqid();
+      $e->id_participant = $_SESSION['uniqid'];
+      $e->nom_participant = Users::find($_SESSION['uniqid'])->nom;
+      $e->prenom_participant = Users::find($_SESSION['uniqid'])->prenom;
       array_push($_SESSION['panier'],$e);
+      /**
       $event = Events::find($e->id_evenement);
 
       $organiser = Organisers::find($event->id_organisateur);
       $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
       return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+      */
+      $url = $this->router->pathFor('anEvent', ['id' => $e->id_evenement]);
+      return $response->withRedirect($url);
     }
 
     public function addPanierGroup(Request $request, Response $response, $args){
@@ -518,8 +525,9 @@ final class UserController
             array_push($tabGroups,$group);
         }
       }
-      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
-      //return $response->withRedirect($this->router->pathFor('anEvent'));
+      //return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
+      $url = $this->router->pathFor('anEvent', ['id' => $epreuve->id_evenement]);
+      return $response->withRedirect($url);
     }
 
     public function panier(Request $request, Response $response, $args){
@@ -531,7 +539,7 @@ final class UserController
     }
 
     public function delelempanier(Request $request, Response $response, $args){
-      
+
       $tab = array();
       foreach ($_SESSION['panier'] as $value) {
         if($value->id_elem != $args['idelem']){
@@ -545,7 +553,9 @@ final class UserController
         array_push($_SESSION['panier'], $new_value);
         $prix_total = $prix_total + $new_value->prix;
       }
-      return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+      //return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+      $url = $this->router->pathFor('panier');
+      return $response->withRedirect($url);
     }
 
     public function inscriptionall(Request $request, Response $response, $args){

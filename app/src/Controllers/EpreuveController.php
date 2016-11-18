@@ -156,7 +156,7 @@ class EpreuveController
         }else{
           $telephone = 'non transmis';
         }
-        array_push($tab_csv,array($participants->nom, $participants->prenom, $participants->email, $telephone, $participants->num_dossard));
+        array_push($tab_csv,array($participants->nom, $participants->prenom, $participants->email, $telephone, $participants->doss));
 
       }
 

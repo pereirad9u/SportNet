@@ -45,16 +45,18 @@
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
             <p>Prix : {{ epreuve.prix }}€ </p>
+
             {% if epreuve.nb_participants >= epreuve.nb_participants_max or epreuve.inscription==0   %}
                 <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+
             {% else %}
               {% if epreuve.participe %}
                 <div id="modal{{epreuve.id}}" class="modal">
                   <div class="modal-content">
                     <h4>Inscription à {{epreuve.nom }}</h4>
                     <p>Vous souhaitez vous inscrire à cette épreuve ?
-                      Cependant, vous participé déjà à cette épreuve :(
-                      Néanmoins vous pouvez vous inscrire à nos autres épreuves!
+                      Malheureusement, vous participé déjà à cette épreuve :(
+                      Néanmoins vous pouvez vous inscrire aux autres épreuves de notre évènement!
                     </p>
                   </div>
                   <div class="modal-footer">
@@ -68,7 +70,7 @@
                   <div class="modal-content">
                     <h4>Inscription à {{epreuve.nom }}</h4>
                     <p>Vous souhaitez vous inscrire à cette épreuve ?
-                      Pour participer et faire parti de la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }}.
+                      Pour participer et faire parti de la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }} €.
                       Vous pouvez également payer plus tard en jetant un coup d'oeil dans votre panier!
                     </p>
                   </div>
@@ -91,8 +93,8 @@
                   <div id="modal{{epreuve.id}}{{group.id}}" class="modal">
                     <div class="modal-content">
                       <h4>Inscription à {{epreuve.nom }}</h4>
-                      <p>Vous souhaitez vous inscrire à cette épreuve ?
-                        Pour participer et faire parti de la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }}.
+                      <p>Vous souhaitez inscrire votre groupe {{group.nom}} à cette épreuve ?
+                        Pour inscrire votre groupe dans la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }} € par membres.
                         Vous pouvez également payer plus tard en jetant un coup d'oeil dans votre panier!
                       </p>
                     </div>
@@ -108,6 +110,7 @@
                 {% endif %}
               {% endif %}
             {% endif %}
+            </div>
         </div>
 
         {% endfor %}

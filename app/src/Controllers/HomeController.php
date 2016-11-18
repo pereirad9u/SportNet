@@ -8,6 +8,8 @@ use App\Models\Epreuves;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Sirius\Validation\Rule\Date;
+use Sirius\Validation\Rule\DateTime;
 
 final class HomeController
 {
@@ -15,8 +17,9 @@ final class HomeController
     private $logger;
     private $user;
 
-    private function renderDate($date){
-        $d = explode("-",$date);
+    private function renderDate($date)
+    {
+        $d = explode("-", $date);
         return "$d[2]/$d[1]/$d[0]";
     }
 
@@ -43,7 +46,6 @@ final class HomeController
                         break;
                 }
                 $this->view->render($response, 'hello_org.twig',['e'=>$event]);
-
             } else {
                 $user = Users::find($_SESSION['uniqid']);
                 $this->view->render($response, 'hello_user.twig');
@@ -59,7 +61,39 @@ final class HomeController
 
     public function search(Request $request, Response $response, $args)
     {
-        $this->view->render($response, 'search.twig');
+        if (isset($_GET['recherche']) && $_GET['recherche'] != "") {
+            $recherche = $_GET['recherche'];
+
+            $events = Events::where('nom', 'like', '%' . $recherche . '%')->where('etat','!=','nonvalide');
+            if (isset($_GET['date']) && $_GET['date'] != "") {
+                $events->where('date_debut','<=',$_GET['date'])->where('date_fin','>=',$_GET['date']);
+            }
+            if (isset($_GET['lieu']) && $_GET['lieu'] != "") {
+                $events->where('lieu','like',$_GET['lieu']);
+
+            }
+            if (isset($_GET['discipline']) && $_GET['discipline'] != "") {
+                $events->where('lieu','like',$_GET['discipline']);
+
+
+            }
+            $events = $events->get();
+            foreach ($events as $event) {
+                $event->date_debut = $this->renderDate($event->date_debut);
+                $event->nb_epreuve = Epreuves::where('id_evenement', $event->id)->count();
+                switch ($event->etat) {
+                    case 'nonvalide':
+                        $event->etat = "Non validé";
+                        break;
+                    case 'valide':
+                        $event->etat = "Non validé";
+                        break;
+                }
+            }
+            return $this->view->render($response, 'search.twig', ['recherche' => $recherche, 'events' => $events,'get'=> $_GET]);
+
+        }
+        return $this->view->render($response, 'search.twig');
 
     }
 }
