@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 16, 2016 at 04:23 PM
+-- Generation Time: Nov 18, 2016 at 08:23 AM
 -- Server version: 5.6.30-1
 -- PHP Version: 7.0.12-1
 
@@ -47,8 +47,9 @@ CREATE TABLE `epreuves` (
 
 INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `photo`, `inscription`, `id_evenement`, `nb_participants`, `nb_participants_max`, `prix`, `discipline`, `image`) VALUES
 ('582c34273c556', 'saute mouton', 'de la merde', '2016-11-17', '', 1, '582c339518a14', 0, 333, 333, 'saut', 'images/582c3427381b5.jpg'),
-('582c7907849c3', 'Lancer de bites', 'Lisez le nom...\r\nTout est dit.', '2016-11-25', '', 1, '582c78486ef3a', 0, 10, 10, 'lancé', 'images/582c790781564.jpeg'),
-('582c7907947a3', 'Course déguisé en couteau', 'Effectuez une course de 15km déguisé en votre plus beau canif!\r\nUne expérience inoubliable.', '2016-11-26', '', 1, '582c78486ef3a', 0, 300, 300, 'course', 'images/582c79079101a.jpg');
+('582c7907849c3', 'Lancer de bites', 'Lisez le nom...\r\nTout est dit.', '2016-11-25', '', 1, '582c78486ef3a', 3, 10, 10, 'lancé', 'images/582c790781564.jpeg'),
+('582c7907947a3', 'Course déguisé en couteau', 'Effectuez une course de 15km déguisé en votre plus beau canif!\r\nUne expérience inoubliable.', '2016-11-26', '', 1, '582c78486ef3a', 0, 300, 300, 'course', 'images/582c79079101a.jpg'),
+('582c7ccb91e66', 'tes', 'test', '2016-11-25', '', 1, '582c7ca5a349b', 0, 888, 888, 'test', 'images/582c7ccb8f23c.jpg');
 
 -- --------------------------------------------------------
 
@@ -74,8 +75,29 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `description`, `discipline`, `etat`, `id_organisateur`, `nb_participants`) VALUES
-('582c339518a14', 'Une flemme intense', 'in your ass', '2016-11-17', '2016-11-18', 'Un truc de merde', '', 'ouvertes', '', 0),
-('582c78486ef3a', 'Une flemme intense II', 'Quelque part', '2016-11-24', '2016-11-26', 'Un évènement pronant la flemme.\r\nDeuxième édition.\r\nPensez à prendre vos bites et vos couteaux.', '', 'ouvertes', '582b1f4d19a72', 0);
+('582c339518a14', 'Une flemme intense', 'in your ass', '2016-11-20', '2016-11-21', 'Un truc de merde', '', 'ouvertes', '582b1f4d19a72', 0),
+('582c78486ef3a', 'Une flemme intense II', 'Quelque part', '2016-11-24', '2016-11-26', 'Un évènement pronant la flemme.\r\nDeuxième édition.\r\nPensez à prendre vos bites et vos couteaux.', '', 'ouvertes', '582b1f4d19a72', 0),
+('582c7ca5a349b', 'test', 'test', '2016-11-17', '2016-11-18', 'test', '', 'ouvertes', '582b1f4d19a72', 0),
+('582c7d344414f', 'test', 'test', '2016-11-16', '2016-11-16', 'test', '', 'nonvalide', '582b1f4d19a72', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `groups`
+--
+
+CREATE TABLE `groups` (
+  `id` varchar(23) NOT NULL,
+  `nom` text NOT NULL,
+  `id_responsable` varchar(23) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `nom`, `id_responsable`) VALUES
+('582dd68650227', 'Les teubayy', '582b21287c1e5');
 
 -- --------------------------------------------------------
 
@@ -164,7 +186,26 @@ CREATE TABLE `users_epreuves` (
 
 INSERT INTO `users_epreuves` (`id_users`, `id_epreuves`, `num_dossard`) VALUES
 ('582b24eb424f6', '582c34273c556', 124),
-('582b21287c1e5', '582c34273c556', 123);
+('582b24eb424f6', '582c7907849c3', 2),
+('582b21287c1e5', '582c7907849c3', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_groups`
+--
+
+CREATE TABLE `users_groups` (
+  `id_utilisateur` varchar(23) NOT NULL,
+  `id_group` varchar(23) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_groups`
+--
+
+INSERT INTO `users_groups` (`id_utilisateur`, `id_group`) VALUES
+('582b24eb424f6', '582dd68650227');
 
 --
 -- Indexes for dumped tables
@@ -180,6 +221,12 @@ ALTER TABLE `epreuves`
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `groups`
+--
+ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -206,6 +253,24 @@ ALTER TABLE `users`
 ALTER TABLE `users_epreuves`
   ADD PRIMARY KEY (`id_users`,`id_epreuves`),
   ADD KEY `id_epreuves` (`id_epreuves`);
+
+--
+-- Indexes for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD PRIMARY KEY (`id_group`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD CONSTRAINT `users_groups_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `users_groups_ibfk_2` FOREIGN KEY (`id_group`) REFERENCES `groups` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
