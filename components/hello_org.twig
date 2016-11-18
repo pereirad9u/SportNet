@@ -13,8 +13,19 @@
     <div class="parallax"><img src="images/home.jpg"></div>
 </div>
 
+{% if last_events is not defined and  e is not defined  %}
+    <div class="row col s12 m8 l8 center card-panel "><h4>Vous n'avez pas encore créé d'évènements, pour commencer
+
+            rendez vous sur
+            <a href="/createevent">Créer un évènement</a>
+        </h4></div>
+
+{% else %}
+
+
 <div class="container">
     <div class="section">
+        {% if e is defined  %}
         <h5>Votre prochain événement :</h5>
         <div class="row">
             <div class="card blue-grey darken-1 col s12 m5 l5 offset-m4 offset-l4">
@@ -35,10 +46,14 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <div class="section">
+        {% if last_events is defined  %}
+
         <h5>Vos événements passés :</h5>
         <div class="row">
-          {% for last_ev in last_events %}
+
+            {% for last_ev in last_events %}
           <div class="card blue-grey darken-1 col s12 m5 offset-m1 l5 offset-l1">
               <div class="card-content white-text">
                   <span class="card-title">{{last_ev.nom}}</span>
@@ -53,6 +68,8 @@
           </div>
           {% endfor %}
         </div>
+        {% endif %}
     </div>
 
 </div>
+{% endif %}
