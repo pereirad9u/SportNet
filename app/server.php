@@ -9,6 +9,9 @@
 require PATH_ROOT . '/../vendor/autoload.php';
 
 session_start();
+if (!isset($_SESSION['panier'])){
+    $_SESSION['panier'] = array();
+}
 
 // Instantiate the app
 $settings = require PATH_ROOT . '/../config/setting.php';
