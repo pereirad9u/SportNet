@@ -1,5 +1,5 @@
 </main>
-<footer class="page-footer teal"  id="footer" >
+<footer class="page-footer teal" id="footer">
     <div class="container">
         <div id="footer_row" class="row">
             <div class="col l6 s12">
@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/css/materialize/js/materialize.js"></script>
 <script type="text/javascript" src="/JS/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/JS/jquery.validate.js"></script>
+<script type="text/javascript" src="/JS/search.js"></script>
 
 
 <script>
@@ -24,20 +25,23 @@
 <script type="text/javascript" src="/JS/ajoutEpreuve.js"></script>
 <script type="text/javascript" src="/JS/ajoutMembre.js"></script>
 <script>
-    $('.button-collapse').sideNav();
-    $('.carousel.carousel-slider').carousel({
-        full_width: true,
-        time_constant: 100
-    });
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 90 // Creates a dropdown of 15 years to control year
-    });
+    $(document).ready(function () {
+        $('.button-collapse').sideNav();
+        $('.carousel.carousel-slider').carousel({
+            full_width: true,
+            time_constant: 100
+        });
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 90 // Creates a dropdown of 15 years to control year
+        });
 
-    $(document).ready(function(){
+
         $('.carousel').carousel();
         $('.modal').modal();
         $('#modal1').modal('open');
+
+
     });
 
 </script>
