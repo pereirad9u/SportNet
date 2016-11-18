@@ -94,6 +94,7 @@
             <li><a class="dropdown-button" href="#!" data-activates="dropdown7">mes évènements<i class="material-icons right">arrow_drop_down</i></a></li>
         {% else %}
             <li><a class="dropdown-button" href="#!" data-activates="dropdown8">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a href="/panier">Panier()<i class="material-icons right">shopping_cart</i></a></li>
 
         {% endif %}
     {% endif %}
@@ -116,7 +117,7 @@
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown2">mes évènements<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% else %}
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown3">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
-                    <li><a href="/panier"><i class="material-icons">shopping_cart</i></a></li>
+                    <li><a href="/panier">Panier({{ nb_panier }})<i class="material-icons right">shopping_cart</i></a></li>
                 {% endif %}
             {% endif %}
         </ul>

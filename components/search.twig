@@ -1,10 +1,10 @@
 <div class="container">
-    {% if recherche is defined %}
+    {% if get.recherche is defined %}
         <form method="get" class="col s12">
             <div class="row">
                 <div class="input-field col s12">
                     <label> Rechercher un évènement :</label>
-                    <input type="text" name="recherche" value="{{ recherche }}" required></div>
+                    <input type="text" name="recherche" {% if get.date is defined and get.date != "" %} value="{{ get.recherche }}{% endif %}" ></div>
             </div>
             <div id="filter" class="row">
                 {% if get.date is defined and get.date != "" %}
@@ -101,7 +101,6 @@
                             <a href="/anEvent/{{ event.id }}">Voir</a>
                         </div>
                     </div>
-
                 {% endfor %}
             </div>
         {% else %}
@@ -109,7 +108,7 @@
                 <div class="col s12 m4 l6 offset-l3 center">
                     <br>
                     <br>
-                    <div class="card-panel"><h5>Aucun résultat pour : {{ recherche }},  {% if get.discipline is defined and get.discipline != "" %} en {{ get.discipline }} {% endif %}  {% if get.lieu is defined and get.lieu != "" %}à {{ get.lieu }}{% endif %} {% if get.date is defined and get.date != "" %}le {{ get.date }}{% endif %} </h5></div>
+                    <div class="card-panel"><h5>Aucun résultat pour : {% if get.recherche is defined and get.recherche != "" %}{{ get.recherche }}{% endif %}  {% if get.discipline is defined and get.discipline != "" %} <br>Discipline : {{ get.discipline }} {% endif %}  {% if get.lieu is defined and get.lieu != "" %}<br>Lieu : {{ get.lieu }}{% endif %} {% if get.date is defined and get.date != "" %}<br>Date : {{ get.date }}{% endif %} </h5></div>
 
                 </div>
             </div>
