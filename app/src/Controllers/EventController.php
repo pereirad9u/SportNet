@@ -10,10 +10,12 @@
 namespace App\Controllers;
 
 use App\Models\Epreuves;
+use App\Models\UserEpreuve;
 use App\Models\Events;
 use App\Models\Results;
-use App\Models\User;
+use App\Models\Users;
 use App\Models\Organisers;
+use App\Models\Groups;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -66,60 +68,82 @@ final class EventController
     }
 
     public function anEventOrg(Request $request, Response $response,$args){
+        $url = $_SERVER['HTTP_HOST'].substr($_SERVER['PATH_INFO'], 0, 8).substr($_SERVER['PATH_INFO'], 11);
         $event = Events::find($args['id']);
         $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-        return $this->view->render($response,'anEventOrg.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
+        return $this->view->render($response,'anEventOrg.twig', array('url'=>$url, 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
     }
 
     public function anEvent(Request $request, Response $response,$args){
         $event = Events::find($args['id']);
         $organiser = Organisers::find($event->id_organisateur);
         $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-        return $this->view->render($response,'anEvent.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+        foreach ($tabEpreuve as $epreuve) {
+          if (UserEpreuve::where('id_epreuves','=',$epreuve->id)->where('id_users','=',$_SESSION['uniqid'])->count() > 0){
+            $epreuve->participe = true;
+          }else{
+            $epreuve->participe = false;
+          }
+        }
+
+        if (Groups::where('id_responsable','=',$_SESSION['uniqid'])->count()  > 0){
+          $tabGroups = array();
+          foreach (Groups::where('id_responsable','=',$_SESSION['uniqid'])->get() as $group) {
+              array_push($tabGroups,$group);
+          }
+        }
+        return $this->view->render($response,'anEvent.twig', array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
     }
 
     private function modifDate($date) {
-        $jm = explode(' ', $date);
-        $m = explode(',', $jm[1]);
-        switch ($m[0]) {
+        $date_explode = explode(' ', $date);
+        $mois_explode = explode(',', $date_explode[1]);
+        switch ($mois_explode[0]) {
             case "January":
-                $m[0] = '01';
+                $mois_explode[0] = '01';
                 break;
             case "February":
-                $m[0] = '02';
+                $mois_explode[0] = '02';
                 break;
             case "March":
-                $m[0] = '03';
+                $mois_explode[0] = '03';
                 break;
             case "April":
-                $m[0] = '04';
+                $mois_explode[0] = '04';
                 break;
             case "May":
-                $m[0] = '05';
+                $mois_explode[0] = '05';
                 break;
             case "June":
-                $m[0] = '06';
+                $mois_explode[0] = '06';
                 break;
             case "July":
-                $m[0] = '07';
+                $mois_explode[0] = '07';
                 break;
             case "August":
-                $m[0] = '08';
+                $mois_explode[0] = '08';
                 break;
             case "September":
-                $m[0] = '09';
+                $mois_explode[0] = '09';
                 break;
             case "October":
-                $m[0] = '10';
+                $mois_explode[0] = '10';
                 break;
             case "November":
-                $m[0] = '11';
+                $mois_explode[0] = '11';
                 break;
             case "December":
-                $m[0] = '12';
+                $mois_explode[0] = '12';
                 break;
         }
-        return "$jm[2]-$m[0]-$jm[0]";
+        return "$date_explode[2]-$mois_explode[0]-$date_explode[0]";
+    }
+
+    private function renderDate($date){
+        $d = explode("-",$date);
+
+        return "$d[2]/$d[1]/$d[0]";
+
     }
 
     public function affichageResultat(Request $request, Response $response,$args) {
@@ -128,14 +152,37 @@ final class EventController
         $datas[0] = ['nom', 'prenom', 'classement', 'temps'];
         foreach ($resultats as $r) {
             $d=[];
-            $u = User::find($r->id_utilisateur);
-            array_push($d, $u->nom);
-            array_push($d, $u->prenom);
+            $user = Users::find($r->id_utilisateur);
+            array_push($d, $user->nom);
+            array_push($d, $user->prenom);
             array_push($d, $r->classement);
             array_push($d, $r->temps);
             array_push($datas, $d);
         }
         return $this->view->render($response,'resultEvent.twig', array('datas' => $datas));
+    }
+
+    public function manage(Request $request, Response $response,$args){
+        if(isset($_SESSION['uniqid']) && isset($_SESSION['type']) && $_SESSION['type'] == 'org'){
+            $events = Events::where('id_organisateur',$_SESSION['uniqid'])->get();
+
+            foreach ($events as $item){
+                $item->date_debut = $this->renderDate($item->date_debut);
+                $item->nb_epreuve = Epreuves::where('id_evenement',$item->id)->count();
+                switch ($item->etat){
+                    case 'nonvalide':
+                        $item->etat = "Non validé";
+                        break;
+                    case 'valide':
+                        $item->etat = "Non validé";
+                        break;
+                }
+            }
+            return $this->view->render($response,'manageEvents.twig', array('events' => $e));
+        }else{
+            return $this->response->withRedirect($this->view->pathFor('homepage'));
+        }
+
     }
 
 }

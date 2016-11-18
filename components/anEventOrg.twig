@@ -18,6 +18,7 @@
                 <p>{{ event.description }}</p>
                 <p>Du :{{ event.date_debut }} au : {{ event.date_fin }}</p>
                 <p>Lieu : {{ event.lieu }} </p>
+                <p>lien de pour les inscriptions : <a href="{{ url }}"> {{ url }}</a> </p>
             </div>
         </div>
 
@@ -42,30 +43,37 @@
             </div>
 
             <div>
-                {% for epreuve in tabEpreuve %}
-                    <div>
-                        <p>{{ epreuve.nom }}</p>
 
-                        <button class="btn waves-effect waves-light teal lighten-1">Participant à l'épreuve</button>
+                <div>
+                    {% for epreuve in tabEpreuve %}
+                        <div>
 
+                            <a href="/participants/{{epreuve.id}}"><div class="btn teal">
+                                Participants à {{ epreuve.nom }}
+                            </div></a>
 
+                            <div class="file-field input-field">
+                                <div class="btn teal">
+                                    <span>Ajouter les résultat de l'épreuve</span>
+                                    <input type="file" name="res[]" accept=".csv">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input required="" class="file-path validate" type="text" name="path_file">
+                                </div>
 
-                        <div class="file-field input-field">
-                            <div class="btn teal">
-                                <span>Ajouter les résultat de l'épreuve</span>
-                                <input type="file" name="res[]" accept=".csv">
+                                <input class="hiddendiv" value="{{epreuve.id}}" name="res_id[]">
+
                             </div>
-                            <div class="file-path-wrapper">
-                                <input required="" class="file-path validate" type="text" name="path_file">
-                            </div>
-
-                            <input class="hiddendiv" value="{{epreuve.id}}" name="res_id[]">
                         </div>
 
 
-                    </div>
-                {% endfor %}
+
+                    {% endfor %}
+                </div>
+
             </div>
+
+
 
         </div>
 
@@ -76,6 +84,7 @@
             <i class="material-icons right">send</i>
         </button>
     </div>
+
 
     </form>
 

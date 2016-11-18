@@ -2,7 +2,7 @@
 // Application middleware
 
 // e.g: $app->add(new \Slim\Csrf\Guard);
-use App\Models\User;
+use App\Models\Users;
 
 
 $app->add(function ($request, $response, $next) {
@@ -18,7 +18,7 @@ $app->add(function ($request, $response, $next) {
                 $o = \App\Models\Organisers::find($_SESSION['uniqid']);
                 $this->view->render($response,'header.twig',['org'=>$o]);
             }else{
-                $u = User::find($_SESSION['uniqid']);
+                $u = Users::find($_SESSION['uniqid']);
                 $this->view->render($response,'header.twig',['user'=>$u]);
             }
 

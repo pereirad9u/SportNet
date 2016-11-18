@@ -37,9 +37,9 @@
 
     <div class="row">
         {% for epreuve in tabEpreuve%}
-        <div class="col s12 m4 l4 card">
+        <div class="col s12 m4 l4 card medium">
             <h6> {{ epreuve.nom }}</h6>
-            <p>{{ epreuve.description }} </p>
+            <p style="height:20%;overflow:scrollable">{{ epreuve.description }} </p>
             <p>Discipline : {{ epreuve.discipline }} </p>
             <p>Date : {{ epreuve.date }} </p>
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
@@ -48,12 +48,72 @@
             {% if epreuve.nb_participants >= epreuve.nb_participants_max or epreuve.inscription==0   %}
                 <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
             {% else %}
-            <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+              {% if epreuve.participe %}
+                <div id="modal{{epreuve.id}}" class="modal">
+                  <div class="modal-content">
+                    <h4>Inscription à {{epreuve.nom }}</h4>
+                    <p>Vous souhaitez vous inscrire à cette épreuve ?
+                      Cependant, vous participé déjà à cette épreuve :(
+                      Néanmoins vous pouvez vous inscrire à nos autres épreuves!
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="" class=" modal-action modal-close waves-effect waves-green btn-flat">Retour</a>
+
+                  </div>
+                </div>
+                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}"> S'inscrire</a>
+              {% else %}
+                <div id="modal{{epreuve.id}}" class="modal">
+                  <div class="modal-content">
+                    <h4>Inscription à {{epreuve.nom }}</h4>
+                    <p>Vous souhaitez vous inscrire à cette épreuve ?
+                      Pour participer et faire parti de la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }}.
+                      Vous pouvez également payer plus tard en jetant un coup d'oeil dans votre panier!
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="/inscription/{{ epreuve.id }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer tout de suite</a>
+                    <a href="/addpanier/{{ epreuve.id }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer plus tard</a>
+                  </div>
+                </div>
+                {% if tabGroups|length > 0 %}
+                  <a class="btn dropdown-button" href="#!" data-activates="dropdown{{epreuve.id}}">S'inscrire<i class="material-icons right">arrow_drop_down</i></a>
+                  <ul id="dropdown{{epreuve.id}}" class="dropdown-content">
+                      <li><a id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}" class="teal-text">Seul</a></li>
+                      <li class="divider teal"></li>
+                      {% for group in tabGroups %}
+                      <li><a id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}{{group.id}}" class="teal-text">{{group.nom}}</a></li>
+                      <li class="divider teal"></li>
+                      {% endfor %}
+                  </ul>
+                  {% for group in tabGroups %}
+                  <div id="modal{{epreuve.id}}{{group.id}}" class="modal">
+                    <div class="modal-content">
+                      <h4>Inscription à {{epreuve.nom }}</h4>
+                      <p>Vous souhaitez vous inscrire à cette épreuve ?
+                        Pour participer et faire parti de la liste de nos participants vous devez nous règler la somme de {{ epreuve.prix }}.
+                        Vous pouvez également payer plus tard en jetant un coup d'oeil dans votre panier!
+                      </p>
+                    </div>
+                    <div class="modal-footer">
+                      <a href="/inscription/{{ epreuve.id }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer tout de suite</a>
+                      <a href="/addpanier/{{ epreuve.id }}/{{group.id}}" class=" modal-action modal-close waves-effect waves-green btn-flat">Payer plus tard</a>
+                    </div>
+                  </div>
+                  {% endfor %}
+
+                {% else %}
+                  <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}"> S'inscrire</a>
+                {% endif %}
+              {% endif %}
             {% endif %}
         </div>
 
         {% endfor %}
 
     </div>
+
+
 
 </div>
