@@ -67,3 +67,8 @@ $app->get('/inscriptionall', 'App\Controllers\UserController:inscriptionall')->s
 $app->get('/creategroup', 'App\Controllers\UserController:creategroup')->setName('creategroup');
 
 $app->post('/creategroup', 'App\Controllers\UserController:addgroup');
+
+$app->post('/ajax/openInscription','App\Controllers\AjaxController:openInscription');
+$app->post('/ajax/closeInscription','App\Controllers\AjaxController:closeInscription');
+
+$app->get('/deleteEpreuve/{id}','App\Controllers\EpreuveController:delete');
