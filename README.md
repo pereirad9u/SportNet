@@ -68,7 +68,7 @@ Pass : Postel5u
 ###Creators
 
 - LAUNAY Guillaume https://github.com/launay12u
-- PEREIRA Alexendre https://github.com/NickMyName
+- PEREIRA Alexandre https://github.com/pereirad9u
 - PIERRE Alexandre https://github.com/pierre121u
 - POSTEL Romain https://github.com/postel5u
 
