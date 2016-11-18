@@ -172,7 +172,7 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
-                    $m = new \App\Models\User();
+                    $m = new \App\Models\Users();
                     $m->id = uniqid();
                     $m->nom = $nom;
                     $m->prenom = $prenom;
@@ -531,11 +531,29 @@ final class UserController
     }
 
     public function panier(Request $request, Response $response, $args){
-      $prix_total = 0;
-      foreach ($_SESSION['panier'] as $elem) {
-        $prix_total = $prix_total + $elem->prix;
-      }
-      return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+        $prix_total = 0;
+
+        foreach ($_SESSION['panier'] as $elem) {
+
+            if(sizeof(UserEpreuve::where("id_users",$_SESSION['uniqid'])->where('id_epreuves',$elem->id)->get())>0){
+
+                $tab = array();
+                foreach ($_SESSION['panier'] as $value) {
+                    if($value->id != $elem->id){
+                        array_push($tab, $value);
+                    }
+                }
+                unset($_SESSION['panier']);
+                $_SESSION['panier']= array();
+                foreach ($tab as $new_value) {
+                    array_push($_SESSION['panier'], $new_value);
+                }
+            }else{
+                $prix_total = $prix_total + $elem->prix;
+            }
+
+        }
+         return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
     }
 
     public function delelempanier(Request $request, Response $response, $args){
@@ -560,7 +578,6 @@ final class UserController
 
     public function inscriptionall(Request $request, Response $response, $args){
       foreach($_SESSION['panier'] as $epreuve){
-
         $e = new UserEpreuve();
         $e->id_users = $epreuve->id_participant;
         $e->id_epreuves = $epreuve->id;
