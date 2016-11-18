@@ -172,7 +172,7 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
-                    
+
                     $user = new \App\Models\Users();
                     $user->id = uniqid();
                     $user->nom = $nom;
@@ -305,7 +305,7 @@ final class UserController
                 $event->nb_epreuve = Epreuves::where('id_evenement', '=', $event->id)->count();
             }
 
-            $interessant = Manager::select("select distinct events.* 
+            $interessant = Manager::select("select distinct events.*
                                             from events join epreuves
                                             where events.id = epreuves.id_evenement
                                             and epreuves.discipline = (select disc.discipline
@@ -455,10 +455,10 @@ final class UserController
                 $events = Events::all();
                 foreach ($events as $event) {
                     $nb = Manager::select("SELECT COUNT(DISTINCT id_users) as nb_participant
-                                                        from users_epreuves 
-                                                        join epreuves join events 
-                                                        where users_epreuves.id_epreuves=epreuves.id 
-                                                        and epreuves.id_evenement=events.id 
+                                                        from users_epreuves
+                                                        join epreuves join events
+                                                        where users_epreuves.id_epreuves=epreuves.id
+                                                        and epreuves.id_evenement=events.id
                                                         and events.id='". $event->id ."';");
                     $event->nb_participants = $nb[0]->nb_participant;
                     $event->save();
@@ -596,16 +596,21 @@ final class UserController
         $e->id_users = $epreuve->id_participant;
         $e->id_epreuves = $epreuve->id;
         $e->num_dossard = UserEpreuve::where('id_epreuves','=',$epreuve->id)->max('num_dossard') + 1;
+
+        $epreuve_select = Epreuve::where($epreuve_id)->first();
+        $epreuve_select->nb_participant++;
+
         $e->save();
+        $epreuve_select->save();
       }
       $_SESSION['panier'] = array();
         $events = Events::all();
         foreach ($events as $event) {
             $nb = Manager::select("SELECT COUNT(DISTINCT id_users) as nb_participant
-                                                        from users_epreuves 
-                                                        join epreuves join events 
-                                                        where users_epreuves.id_epreuves=epreuves.id 
-                                                        and epreuves.id_evenement=events.id 
+                                                        from users_epreuves
+                                                        join epreuves join events
+                                                        where users_epreuves.id_epreuves=epreuves.id
+                                                        and epreuves.id_evenement=events.id
                                                         and events.id='". $event->id ."';");
             $event->nb_participants = $nb[0]->nb_participant;
             $event->save();
