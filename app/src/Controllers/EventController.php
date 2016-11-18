@@ -85,7 +85,7 @@ final class EventController
             $epreuve->participe = false;
           }
         }
-
+        $tabGroups = array();
         if (Groups::where('id_responsable','=',$_SESSION['uniqid'])->count()  > 0){
           $tabGroups = array();
           foreach (Groups::where('id_responsable','=',$_SESSION['uniqid'])->get() as $group) {

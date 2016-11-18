@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4deb1
+-- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Nov 18, 2016 at 04:49 PM
--- Server version: 5.6.30-1
--- PHP Version: 7.0.12-1
+-- Client :  127.0.0.1
+-- Généré le :  Ven 18 Novembre 2016 à 16:18
+-- Version du serveur :  5.7.14
+-- Version de PHP :  5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sportnet`
+-- Base de données :  `sportnet`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `epreuves`
+-- Structure de la table `epreuves`
 --
 
 CREATE TABLE `epreuves` (
@@ -41,7 +41,7 @@ CREATE TABLE `epreuves` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `epreuves`
+-- Contenu de la table `epreuves`
 --
 
 INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `inscription`, `id_evenement`, `nb_participants`, `nb_participants_max`, `prix`, `discipline`, `image`) VALUES
@@ -57,7 +57,7 @@ INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `inscription`, `id_e
 -- --------------------------------------------------------
 
 --
--- Table structure for table `events`
+-- Structure de la table `events`
 --
 
 CREATE TABLE `events` (
@@ -67,27 +67,26 @@ CREATE TABLE `events` (
   `date_debut` date NOT NULL,
   `date_fin` date NOT NULL,
   `description` text NOT NULL,
-  `discipline` text NOT NULL,
   `etat` text NOT NULL,
   `id_organisateur` varchar(23) NOT NULL,
   `nb_participants` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `events`
+-- Contenu de la table `events`
 --
 
-INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `description`, `discipline`, `etat`, `id_organisateur`, `nb_participants`) VALUES
-('582efdb552a60', 'La frite m&#39;habite I', 'Bruxelles', '2016-08-10', '2016-08-13', 'Venez déguster plus d&#39;un milliers de sorte de frites!\r\nParticiper à nos concours du plus gros mangeur de frites!\r\nEt partager votre passion de la frite!', '', 'ouvert', '582b1f4d19a72', 9),
-('582f00cd8da73', 'Sausage Party', 'Strasbourg', '2016-12-20', '2016-11-23', 'L&#39;hiver est proche, le froid se fait sentir.\nVous grelottez ? Venez vous réchauffer à la grande Sausage Party de Strasbourg!!\nAu programme : \nDégustation de saucisses.\nConcours du plus gros mangeur de saucisses.\nGrand lancé de saucisses.', '', 'ouvert', '582b1f4d19a72', 5),
-('582f03a59fa80', 'New Year Tartiflette', 'Mystère', '2016-12-31', '2017-01-02', 'Afin de fêter la nouvelle année dans la bonne humeur et l&#39;abondance, venez à la toute nouvelle New Year Tartiflette!\r\nRégalez vos papilles en goûtant les meilleurs tartiflettes du monde!\r\nParticipez au concours de cuisine, faites votre propre tartiflette et mesurez vous aux autres participants!!', '', 'ouvert', '582b1f4d19a72', 4),
-('582f04f84a2c5', 'La frite m&#39;habite II', 'Bruxelles', '2016-11-20', '2016-11-21', 'Avec le succès de notre première édition, nous nous lançons dans un deuxième évènement.\r\nSur deux jours cette fois ci.\r\nVenez déguster une seconde fois nos meilleurs frites!\r\nNouvelle epreuve : apporter vos propres pomme de terres et faites 10kg de frites le plus rapidement possible!!', '', 'ouvert', '582b1f4d19a72', 1),
-('582f1bf93a529', 'La chopine bien fraiche!', 'Partout', '2017-04-01', '2017-06-30', 'Venez vous confronter au plus puissant puits sans fond!\r\nSon identité restera secrète...\r\nPour le défier, retrouver le bar où il se trouve.', '', 'ouvert', '582ef97c04838', 0);
+INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `description`, `etat`, `id_organisateur`, `nb_participants`) VALUES
+('582efdb552a60', 'La frite m&#39;habite I', 'Bruxelles', '2016-08-10', '2016-08-13', 'Venez déguster plus d&#39;un milliers de sorte de frites!\r\nParticiper à nos concours du plus gros mangeur de frites!\r\nEt partager votre passion de la frite!', 'ouvert', '582b1f4d19a72', 9),
+('582f00cd8da73', 'Sausage Party', 'Strasbourg', '2016-12-20', '2016-11-23', 'L&#39;hiver est proche, le froid se fait sentir.\nVous grelottez ? Venez vous réchauffer à la grande Sausage Party de Strasbourg!!\nAu programme : \nDégustation de saucisses.\nConcours du plus gros mangeur de saucisses.\nGrand lancé de saucisses.', 'ouvert', '582b1f4d19a72', 5),
+('582f03a59fa80', 'New Year Tartiflette', 'Mystère', '2016-12-31', '2017-01-02', 'Afin de fêter la nouvelle année dans la bonne humeur et l&#39;abondance, venez à la toute nouvelle New Year Tartiflette!\r\nRégalez vos papilles en goûtant les meilleurs tartiflettes du monde!\r\nParticipez au concours de cuisine, faites votre propre tartiflette et mesurez vous aux autres participants!!', 'ouvert', '582b1f4d19a72', 4),
+('582f04f84a2c5', 'La frite m&#39;habite II', 'Bruxelles', '2016-11-20', '2016-11-21', 'Avec le succès de notre première édition, nous nous lançons dans un deuxième évènement.\r\nSur deux jours cette fois ci.\r\nVenez déguster une seconde fois nos meilleurs frites!\r\nNouvelle epreuve : apporter vos propres pomme de terres et faites 10kg de frites le plus rapidement possible!!', 'ouvert', '582b1f4d19a72', 1),
+('582f1bf93a529', 'La chopine bien fraiche!', 'Partout', '2017-04-01', '2017-06-30', 'Venez vous confronter au plus puissant puits sans fond!\r\nSon identité restera secrète...\r\nPour le défier, retrouver le bar où il se trouve.', 'ouvert', '582ef97c04838', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groups`
+-- Structure de la table `groups`
 --
 
 CREATE TABLE `groups` (
@@ -97,7 +96,7 @@ CREATE TABLE `groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `groups`
+-- Contenu de la table `groups`
 --
 
 INSERT INTO `groups` (`id`, `nom`, `id_responsable`) VALUES
@@ -107,7 +106,7 @@ INSERT INTO `groups` (`id`, `nom`, `id_responsable`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `organisers`
+-- Structure de la table `organisers`
 --
 
 CREATE TABLE `organisers` (
@@ -122,7 +121,7 @@ CREATE TABLE `organisers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `organisers`
+-- Contenu de la table `organisers`
 --
 
 INSERT INTO `organisers` (`id`, `nom`, `prenom`, `email`, `nom_association`, `motdepasse`, `siteweb`, `telephone`) VALUES
@@ -134,7 +133,7 @@ INSERT INTO `organisers` (`id`, `nom`, `prenom`, `email`, `nom_association`, `mo
 -- --------------------------------------------------------
 
 --
--- Table structure for table `results`
+-- Structure de la table `results`
 --
 
 CREATE TABLE `results` (
@@ -146,7 +145,7 @@ CREATE TABLE `results` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `results`
+-- Contenu de la table `results`
 --
 
 INSERT INTO `results` (`id`, `classement`, `temps`, `id_utilisateur`, `id_epreuve`) VALUES
@@ -163,7 +162,7 @@ INSERT INTO `results` (`id`, `classement`, `temps`, `id_utilisateur`, `id_epreuv
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Structure de la table `users`
 --
 
 CREATE TABLE `users` (
@@ -176,7 +175,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Contenu de la table `users`
 --
 
 INSERT INTO `users` (`id`, `nom`, `prenom`, `email`, `telephone`, `motdepasse`) VALUES
@@ -188,7 +187,7 @@ INSERT INTO `users` (`id`, `nom`, `prenom`, `email`, `telephone`, `motdepasse`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_epreuves`
+-- Structure de la table `users_epreuves`
 --
 
 CREATE TABLE `users_epreuves` (
@@ -198,7 +197,7 @@ CREATE TABLE `users_epreuves` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users_epreuves`
+-- Contenu de la table `users_epreuves`
 --
 
 INSERT INTO `users_epreuves` (`id_users`, `id_epreuves`, `num_dossard`) VALUES
@@ -225,7 +224,7 @@ INSERT INTO `users_epreuves` (`id_users`, `id_epreuves`, `num_dossard`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_groups`
+-- Structure de la table `users_groups`
 --
 
 CREATE TABLE `users_groups` (
@@ -234,7 +233,7 @@ CREATE TABLE `users_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users_groups`
+-- Contenu de la table `users_groups`
 --
 
 INSERT INTO `users_groups` (`id_utilisateur`, `id_group`) VALUES
@@ -245,47 +244,47 @@ INSERT INTO `users_groups` (`id_utilisateur`, `id_group`) VALUES
 ('582b21287c1e5', '582f0898c996e');
 
 --
--- Indexes for dumped tables
+-- Index pour les tables exportées
 --
 
 --
--- Indexes for table `epreuves`
+-- Index pour la table `epreuves`
 --
 ALTER TABLE `epreuves`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `events`
+-- Index pour la table `events`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `groups`
+-- Index pour la table `groups`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `organisers`
+-- Index pour la table `organisers`
 --
 ALTER TABLE `organisers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `results`
+-- Index pour la table `results`
 --
 ALTER TABLE `results`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- Index pour la table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users_epreuves`
+-- Index pour la table `users_epreuves`
 --
 ALTER TABLE `users_epreuves`
   ADD PRIMARY KEY (`id_users`,`id_epreuves`),
