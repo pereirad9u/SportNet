@@ -165,7 +165,6 @@ final class EventController
     public function manage(Request $request, Response $response,$args){
         if(isset($_SESSION['uniqid']) && isset($_SESSION['type']) && $_SESSION['type'] == 'org'){
             $events = Events::where('id_organisateur',$_SESSION['uniqid'])->get();
-
             foreach ($events as $item){
                 $item->date_debut = $this->renderDate($item->date_debut);
                 $item->nb_epreuve = Epreuves::where('id_evenement',$item->id)->count();
@@ -178,7 +177,7 @@ final class EventController
                         break;
                 }
             }
-            return $this->view->render($response,'manageEvents.twig', array('events' => $e));
+            return $this->view->render($response,'manageEvents.twig', array('events' => $events));
         }else{
             return $this->response->withRedirect($this->view->pathFor('homepage'));
         }
