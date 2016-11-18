@@ -39,7 +39,7 @@
         {% for epreuve in tabEpreuve%}
         <div class="col s12 m4 l4 card medium">
             <h6> {{ epreuve.nom }}</h6>
-            <p style="height:20%;overflow:scrollable">{{ epreuve.description }} </p>
+            <p style="height:30%;overflow:scrollable;">{{ epreuve.description }} </p>
             <p>Discipline : {{ epreuve.discipline }} </p>
             <p>Date : {{ epreuve.date }} </p>
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
@@ -111,12 +111,10 @@
               {% endif %}
             {% endif %}
             </div>
-        </div>
 
         {% endfor %}
 
     </div>
-
 
 
 </div>
