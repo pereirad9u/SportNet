@@ -64,4 +64,11 @@ $app->get('/inscriptionall', 'App\Controllers\UserController:inscriptionall')->s
 
 $app->get('/creategroup', 'App\Controllers\UserController:creategroup')->setName('creategroup')->add($middleware_user_co);
 
+
 $app->post('/creategroup', 'App\Controllers\UserController:addgroup')->add($middleware_user_co);
+
+
+$app->post('/ajax/openInscription','App\Controllers\AjaxController:openInscription')->add($middleware_org_co);
+$app->post('/ajax/closeInscription','App\Controllers\AjaxController:closeInscription')->add($middleware_org_co);
+
+$app->get('/deleteEpreuve/{id}','App\Controllers\EpreuveController:delete')->add($middleware_org_co);

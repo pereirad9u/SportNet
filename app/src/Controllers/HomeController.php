@@ -43,7 +43,18 @@ final class HomeController
                         $event->etat = "Non validé";
                         break;
                 }
-                $this->view->render($response, 'hello_org.twig',['e'=>$event]);
+
+                $last_events = Events::where('date_fin','<',date('Y-m-d'))->orderBy('date_fin')->get();
+                $i = 0;
+                $tabLastEvents = array();
+                foreach ($last_events as $last_ev) {
+                  $i++;
+                  array_push($tabLastEvents,$last_ev);
+                  if ($i==3)
+                    break;
+
+                }
+                $this->view->render($response, 'hello_org.twig',['e'=>$event, 'last_events'=>$tabLastEvents]);
             } else {
                 $user = Users::find($_SESSION['uniqid']);
                 $this->view->render($response, 'hello_user.twig');

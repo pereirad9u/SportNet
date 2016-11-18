@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 18, 2016 at 08:23 AM
+-- Generation Time: Nov 18, 2016 at 10:26 AM
 -- Server version: 5.6.30-1
 -- PHP Version: 7.0.12-1
 
@@ -49,7 +49,10 @@ INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `photo`, `inscriptio
 ('582c34273c556', 'saute mouton', 'de la merde', '2016-11-17', '', 1, '582c339518a14', 0, 333, 333, 'saut', 'images/582c3427381b5.jpg'),
 ('582c7907849c3', 'Lancer de bites', 'Lisez le nom...\r\nTout est dit.', '2016-11-25', '', 1, '582c78486ef3a', 3, 10, 10, 'lancé', 'images/582c790781564.jpeg'),
 ('582c7907947a3', 'Course déguisé en couteau', 'Effectuez une course de 15km déguisé en votre plus beau canif!\r\nUne expérience inoubliable.', '2016-11-26', '', 1, '582c78486ef3a', 0, 300, 300, 'course', 'images/582c79079101a.jpg'),
-('582c7ccb91e66', 'tes', 'test', '2016-11-25', '', 1, '582c7ca5a349b', 0, 888, 888, 'test', 'images/582c7ccb8f23c.jpg');
+('582c7ccb91e66', 'tes', 'test', '2016-11-25', '', 1, '582c7ca5a349b', 0, 888, 888, 'test', 'images/582c7ccb8f23c.jpg'),
+('582ec56444f35', 'Dodo', 'Dormir...\r\nLe plus longtemps possible!!', '2016-11-29', '', 1, '582ec3d706e94', 0, 15, 15, 'endurance', 'images/582ec5643e2c4.png'),
+('582ec5645c2ad', 'Sieste', 'Faire le maximum de sieste en un temps limité!', '2016-11-29', '', 1, '582ec3d706e94', 0, 25, 25, 'course', 'images/582ec5645820b.jpg'),
+('582ec5647a28a', 'Se réveiller', 'Vous dormez ...\r\nSoudain le réveil sonne!\r\nTenter de vous réveiller le plus vite possible!!!', '2016-11-30', '', 1, '582ec3d706e94', 1, 30, 30, 'course', 'images/582ec5646bab9.jpg');
 
 -- --------------------------------------------------------
 
@@ -78,7 +81,8 @@ INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `descriptio
 ('582c339518a14', 'Une flemme intense', 'in your ass', '2016-11-20', '2016-11-21', 'Un truc de merde', '', 'ouvertes', '582b1f4d19a72', 0),
 ('582c78486ef3a', 'Une flemme intense II', 'Quelque part', '2016-11-24', '2016-11-26', 'Un évènement pronant la flemme.\r\nDeuxième édition.\r\nPensez à prendre vos bites et vos couteaux.', '', 'ouvertes', '582b1f4d19a72', 0),
 ('582c7ca5a349b', 'test', 'test', '2016-11-17', '2016-11-18', 'test', '', 'ouvertes', '582b1f4d19a72', 0),
-('582c7d344414f', 'test', 'test', '2016-11-16', '2016-11-16', 'test', '', 'nonvalide', '582b1f4d19a72', 0);
+('582c7d344414f', 'test', 'test', '2016-11-16', '2016-11-16', 'test', '', 'nonvalide', '582b1f4d19a72', 0),
+('582ec3d706e94', 'Une flemme intense III', 'Mystère', '2016-11-29', '2016-11-30', 'Troisième édition de notre évènement!\r\nToujours dans le meme état d&#39;esprit, la flemme level over 9000!!', '', 'ouvert', '582b1f4d19a72', 0);
 
 -- --------------------------------------------------------
 
@@ -143,7 +147,11 @@ CREATE TABLE `results` (
 
 INSERT INTO `results` (`id`, `classement`, `temps`, `id_utilisateur`, `id_epreuve`) VALUES
 ('582c5aad2b7b7', 1, '30', '582b21287c1e5', '582c34273c556'),
-('582c5aad3d549', 2, '145', '582b24eb424f6', '582c34273c556');
+('582c5aad3d549', 2, '145', '582b24eb424f6', '582c34273c556'),
+('582ec86fcd9ee', 1, '30', '582b21287c1e5', '582ec56444f35'),
+('582ec86fdeeeb', 1, '30', '582b21287c1e5', '582ec5645c2ad'),
+('582ec86fef539', 1, '145', '582b21287c1e5', '582ec5647a28a'),
+('582ec8f81468b', 2, '45', '582b24eb424f6', '582ec56444f35');
 
 -- --------------------------------------------------------
 
@@ -185,9 +193,12 @@ CREATE TABLE `users_epreuves` (
 --
 
 INSERT INTO `users_epreuves` (`id_users`, `id_epreuves`, `num_dossard`) VALUES
-('582b24eb424f6', '582c34273c556', 124),
+('582b21287c1e5', '582ec56444f35', 1),
 ('582b24eb424f6', '582c7907849c3', 2),
-('582b21287c1e5', '582c7907849c3', 1);
+('582b21287c1e5', '582c7907849c3', 1),
+('582b24eb424f6', '582ec56444f35', 2),
+('582b21287c1e5', '582ec5645c2ad', 1),
+('582b21287c1e5', '582ec5647a28a', 0);
 
 -- --------------------------------------------------------
 

@@ -47,7 +47,8 @@ final class UserController
     }
 
     public function signupUser(Request $request, Response $response, $args){
-      return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+            return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+
     }
 
     public function addMemberOrg(Request $request, Response $response, $args) {
@@ -171,6 +172,16 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
+                    $m = new \App\Models\User();
+                    $m->id = uniqid();
+                    $m->nom = $nom;
+                    $m->prenom = $prenom;
+                    $m->email = $email;
+                    $m->telephone = $tel;
+                    $m->motdepasse = $pass;
+                    $m->save ();
+
+                    $_SESSION['uniqid']=$m->id;
                     $user = new \App\Models\Users();
                     $user->id = uniqid();
                     $user->nom = $nom;
@@ -455,6 +466,7 @@ final class UserController
       }
       $e = Epreuves::find($args['id']);
       $e->id_elem = uniqid();
+      $e->id_participant = $_SESSION['uniqid'];
       $e->nom_participant = Users::find($_SESSION['uniqid'])->nom;
       $e->prenom_participant = Users::find($_SESSION['uniqid'])->prenom;
       array_push($_SESSION['panier'],$e);
