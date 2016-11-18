@@ -47,7 +47,8 @@ final class UserController
     }
 
     public function signupUser(Request $request, Response $response, $args){
-      return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+            return $this->view->render($response,'signupuser.twig', array('errors' => $errors));
+
     }
 
     public function addMemberOrg(Request $request, Response $response, $args) {
@@ -171,6 +172,16 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
+                    $m = new \App\Models\User();
+                    $m->id = uniqid();
+                    $m->nom = $nom;
+                    $m->prenom = $prenom;
+                    $m->email = $email;
+                    $m->telephone = $tel;
+                    $m->motdepasse = $pass;
+                    $m->save ();
+
+                    $_SESSION['uniqid']=$m->id;
                     $user = new \App\Models\Users();
                     $user->id = uniqid();
                     $user->nom = $nom;

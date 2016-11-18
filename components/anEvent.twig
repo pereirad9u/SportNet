@@ -37,11 +37,7 @@
 
     <div class="row">
         {% for epreuve in tabEpreuve%}
-<<<<<<< HEAD
-        <div class="col s12 m4 l4 card small">
-=======
         <div class="col s12 m4 l4 card medium">
->>>>>>> e839880becf16f443d404f9508e71b0ee08f4754
             <h6> {{ epreuve.nom }}</h6>
             <p style="height:20%;overflow:scrollable">{{ epreuve.description }} </p>
             <p>Discipline : {{ epreuve.discipline }} </p>
@@ -49,14 +45,10 @@
             <p>Nombre de participant maximum : {{ epreuve.nb_participants_max }} </p>
             <p>Nombre de participant  : {{ epreuve.nb_participants }} </p>
             <p>Prix : {{ epreuve.prix }}€ </p>
-            <div class="center" >
-            {% if epreuve.nb_participants >= epreuve.nb_participants_max   %}
-<<<<<<< HEAD
-                <a class="center btn waves-effect waves-light teal lighten-1 inscription"  id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
-            {% else %}
-            <a class="center btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
-=======
-              <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href=""> S'inscrire</a>
+
+            {% if epreuve.nb_participants >= epreuve.nb_participants_max or epreuve.inscription==0   %}
+                <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}" disabled="" href="/inscription/{{ epreuve.id }}"> S'inscrire</a>
+
             {% else %}
               {% if epreuve.participe %}
                 <div id="modal{{epreuve.id}}" class="modal">
@@ -117,7 +109,6 @@
                   <a class="btn waves-effect waves-light teal lighten-1 inscription" id="{{ epreuve.id }}"  href="#modal{{ epreuve.id }}"> S'inscrire</a>
                 {% endif %}
               {% endif %}
->>>>>>> e839880becf16f443d404f9508e71b0ee08f4754
             {% endif %}
             </div>
         </div>

@@ -322,5 +322,15 @@ class EpreuveController
         return true;
     }
 
+    public function delete(Request $request, Response $response, $args){
+        $id = $args['id'];
+        $epreuve = Epreuves::find($id);
+        $event = Events::find($epreuve->id_evenement);
+        if($_SESSION['uniqid']== $event->id_organisateur){
+            $epreuve->delete();
+        }
+        $url=$this->router->pathFor('anEventOrg',['id'=>$event->id]);
+        return $response->withStatus(302)->withHeader('Location',$url);
+    }
 
 }
