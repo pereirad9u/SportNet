@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 18, 2016 at 03:12 PM
+-- Generation Time: Nov 18, 2016 at 04:22 PM
 -- Server version: 5.6.30-1
 -- PHP Version: 7.0.12-1
 
@@ -52,7 +52,8 @@ INSERT INTO `epreuves` (`id`, `nom`, `description`, `date`, `photo`, `inscriptio
 ('582f0251b6413', 'Mangeur de saucisses', 'Installez vous devant votre assiette de saucisse.\r\nPuis terminez la le plus vite possible!\r\nA vos fourchettes!', '2016-12-21', '', 1, '582f00cd8da73', 0, 30, 30, 'course', 'images/582f0251b0c7e.jpg'),
 ('582f0251c9760', 'Lancé de saucisse', 'Vous disposé d&#39;un nombre limité de saucisse.\r\nVous devez en lancé à 15m le plus vite possible!', '2016-12-22', '', 1, '582f00cd8da73', 0, 10, 10, 'course', 'images/582f0251c6ccf.jpeg'),
 ('582f042bd10f5', 'Concours de cuisine', 'Cuisiné votre propre tartiflette!\r\nTenter de battre les autres participants à l&#39;aide de votre fumet!', '2017-01-01', '', 1, '582f03a59fa80', 0, 15, 15, 'cuisine', 'images/582f042bca920.jpg'),
-('582f059518182', 'Make your french fries', 'Vous devrez réaliser en un temps record 10kg de frites!\r\nA vos fourneaux!!', '2016-11-21', '', 1, '582f04f84a2c5', 1, 10, 10, 'course', 'images/582f059512e56.jpg');
+('582f059518182', 'Make your french fries', 'Vous devrez réaliser en un temps record 10kg de frites!\r\nA vos fourneaux!!', '2016-11-21', '', 1, '582f04f84a2c5', 1, 10, 10, 'course', 'images/582f059512e56.jpg'),
+('582f1c7f91723', 'Defie du champion', 'Trouver notre champion.\r\nDéfier le à la descente de pinte!\r\nLe but est d&#39;en boire 10 le plus vite possible!!\r\nA vos chopes!!', '2017-04-01', '', 1, '582f1bf93a529', 0, 100, 100, 'course', 'images/582f1c7f8c2e7.jpg');
 
 -- --------------------------------------------------------
 
@@ -81,7 +82,8 @@ INSERT INTO `events` (`id`, `nom`, `lieu`, `date_debut`, `date_fin`, `descriptio
 ('582efdb552a60', 'La frite m&#39;habite I', 'Bruxelles', '2016-08-10', '2016-08-13', 'Venez déguster plus d&#39;un milliers de sorte de frites!\r\nParticiper à nos concours du plus gros mangeur de frites!\r\nEt partager votre passion de la frite!', '', 'ouvert', '582b1f4d19a72', 0),
 ('582f00cd8da73', 'Sausage Party', 'Strasbourg', '2016-12-20', '2016-11-23', 'L&#39;hiver est proche, le froid se fait sentir.\nVous grelottez ? Venez vous réchauffer à la grande Sausage Party de Strasbourg!!\nAu programme : \nDégustation de saucisses.\nConcours du plus gros mangeur de saucisses.\nGrand lancé de saucisses.', '', 'ouvert', '582b1f4d19a72', 0),
 ('582f03a59fa80', 'New Year Tartiflette', 'Mystère', '2016-12-31', '2017-01-02', 'Afin de fêter la nouvelle année dans la bonne humeur et l&#39;abondance, venez à la toute nouvelle New Year Tartiflette!\r\nRégalez vos papilles en goûtant les meilleurs tartiflettes du monde!\r\nParticipez au concours de cuisine, faites votre propre tartiflette et mesurez vous aux autres participants!!', '', 'ouvert', '582b1f4d19a72', 0),
-('582f04f84a2c5', 'La frite m&#39;habite II', 'Bruxelles', '2016-11-20', '2016-11-21', 'Avec le succès de notre première édition, nous nous lançons dans un deuxième évènement.\r\nSur deux jours cette fois ci.\r\nVenez déguster une seconde fois nos meilleurs frites!\r\nNouvelle epreuve : apporter vos propres pomme de terres et faites 10kg de frites le plus rapidement possible!!', '', 'ouvert', '582b1f4d19a72', 0);
+('582f04f84a2c5', 'La frite m&#39;habite II', 'Bruxelles', '2016-11-20', '2016-11-21', 'Avec le succès de notre première édition, nous nous lançons dans un deuxième évènement.\r\nSur deux jours cette fois ci.\r\nVenez déguster une seconde fois nos meilleurs frites!\r\nNouvelle epreuve : apporter vos propres pomme de terres et faites 10kg de frites le plus rapidement possible!!', '', 'ouvert', '582b1f4d19a72', 0),
+('582f1bf93a529', 'La chopine bien fraiche!', 'Partout', '2017-04-01', '2017-06-30', 'Venez vous confronter au plus puissant puits sans fond!\r\nSon identité restera secrète...\r\nPour le défier, retrouver le bar où il se trouve.', '', 'ouvert', '582ef97c04838', 0);
 
 -- --------------------------------------------------------
 
