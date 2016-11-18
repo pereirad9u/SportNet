@@ -3,10 +3,18 @@
 namespace App\Controllers;
 
 use App\Models\Epreuves;
+use App\Models\Events;
 use App\Models\Organisers;
+use App\Models\Results;
 use App\Models\UserEpreuve;
 use App\Models\Users;
-use App\Models\Events;
+use App\Models\Groups;
+use App\Models\UserGroup;
+
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -94,16 +102,16 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
-                    $m = new \App\Models\Organisers();
-                    $m->id = uniqid();
-                    $m->nom = $nom;
-                    $m->prenom = $prenom;
-                    $m->nom_association = $asso;
-                    $m->email = $email;
-                    $m->siteweb = $website;
-                    $m->telephone = $tel;
-                    $m->motdepasse = $pass;
-                    $m->save ();
+                    $organiser = new \App\Models\Organisers();
+                    $organiser->id = uniqid();
+                    $organiser->nom = $nom;
+                    $organiser->prenom = $prenom;
+                    $organiser->nom_association = $asso;
+                    $organiser->email = $email;
+                    $organiser->siteweb = $website;
+                    $organiser->telephone = $tel;
+                    $organiser->motdepasse = $pass;
+                    $organiser->save ();
                     return $response->withRedirect($this->router->pathFor('homepage'));
 
                 }
@@ -163,22 +171,22 @@ final class UserController
                     $pass = password_hash ( $pass, PASSWORD_DEFAULT, array (
                         'cost' => 12,
                     ) );
-                    $m = new \App\Models\Users();
-                    $m->id = uniqid();
-                    $m->nom = $nom;
-                    $m->prenom = $prenom;
-                    $m->email = $email;
-                    $m->telephone = $tel;
-                    $m->motdepasse = $pass;
-                    $m->save ();
+                    $user = new \App\Models\Users();
+                    $user->id = uniqid();
+                    $user->nom = $nom;
+                    $user->prenom = $prenom;
+                    $user->email = $email;
+                    $user->telephone = $tel;
+                    $user->motdepasse = $pass;
+                    $user->save ();
 
-                    $_SESSION['uniqid']=$m->id;
+                    $_SESSION['uniqid']=$user->id;
                     $_SESSION['type']='user';
 
                     if(isset($_SESSION['route'])){
-                        $r = $_SESSION['route'];
+                        $derniere_route = $_SESSION['route'];
                         unset($_SESSION['route']);
-                        return $response->withStatus(302)->withHeader('Location',$r);
+                        return $response->withStatus(302)->withHeader('Location',$derniere_route);
                     }else{
                         return $response->withRedirect($this->router->pathFor('homepage'));
                     }
@@ -211,10 +219,10 @@ final class UserController
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
                 $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-                $m = Organisers::where("email", "=", $email)->get()->first();
-                if(isset($m->id)) {
-                    if (password_verify($password, $m->motdepasse)) {
-                        $_SESSION["uniqid"] = $m->id;
+                $organiser = Organisers::where("email", "=", $email)->get()->first();
+                if(isset($organiser->id)) {
+                    if (password_verify($password, $organiser->motdepasse)) {
+                        $_SESSION["uniqid"] = $organiser->id;
                         $_SESSION["type"] = 'org';
                         return $response->withRedirect($this->router->pathFor('homepage'));
                     }
@@ -240,15 +248,15 @@ final class UserController
             if(isset($_POST["email"]) && isset($_POST["password"])) {
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
                 $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-                $m = Users::where("email", $email)->get()->first();
-                if(isset($m->id)) {
-                    if (password_verify($password, $m->motdepasse)) {
-                        $_SESSION["uniqid"] = $m->id;
+                $user = Users::where("email", $email)->get()->first();
+                if(isset($user->id)) {
+                    if (password_verify($password, $user->motdepasse)) {
+                        $_SESSION["uniqid"] = $user->id;
                         $_SESSION["type"] = 'user';
                         if(isset($_SESSION['route'])){
-                            $r = $_SESSION['route'];
+                            $derniere_route = $_SESSION['route'];
                             unset($_SESSION['route']);
-                            return $response->withStatus(302)->withHeader('Location',$r);
+                            return $response->withStatus(302)->withHeader('Location',$derniere_route);
                         }else{
                             return $response->withRedirect($this->router->pathFor('homepage'));
                         }
@@ -279,24 +287,97 @@ final class UserController
 
     public function profil(Request $request, Response $response, $args)
     {
+
+        if ($_SESSION['type'] == 'user') {
+            $u = Users::find($_SESSION['uniqid']);
+            $org = false;
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves join users_epreuves join users
+                                  where users.id=users_epreuves.id_users
+                                  and users_epreuves.id_epreuves=epreuves.id
+                                  and epreuves.id_evenement=events.id
+                                  and users.id='".$_SESSION['uniqid']."'
+                                  order by events.date_debut desc");
+            $interessant = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                            from events join epreuves
+                                            where events.id = epreuves.id_evenement
+                                            and events.etat = 'ouvertes'
+                                            and epreuves.discipline = (select discipline
+                                                                       from epreuves join users_epreuves
+                                                                       where epreuves.id = users_epreuves.id_epreuves
+                                                                       and users_epreuves.id_users = '". $_SESSION['uniqid'] ."'
+                                                                       GROUP by discipline
+                                                                       having count(discipline) >= (select COUNT(discipline) from epreuves join users_epreuves
+                                                                                  where epreuves.id = users_epreuves.id_epreuves
+                                                                                  and users_epreuves.id_users = '". $_SESSION['uniqid'] ."')
+                                                                      )
+                                            ");
+            $r = Results::where('id_utilisateur', $_SESSION['uniqid'])
+                ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
+                ->join('events', 'events.id', '=', 'epreuves.id_evenement')
+                ->orderBy('events.date_fin')
+                ->get(array('*', 'events.nom as nomE', 'epreuves.nom as nom'));
+            foreach ($r as $res) {
+                $res->date = $this->renderDate($res->date);
+            }
+        } else {
+            $u = Organisers::find($_SESSION['uniqid']);
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves
+                                  where epreuves.id_evenement=events.id
+                                  and events.id_organisateur='".$_SESSION['uniqid']."'
+                                  order by events.date_debut desc");
+            $org = true;
+        }
+        foreach ($e as $event) {
+            $event->date_debut = $this->renderDate($event->date_debut);
+        }
+        $this->view->render($response, 'profil.twig', array('interessant' => $interessant, 'user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+    }
+
+    public function profilUser(Request $request, Response $response, $args)
+    {
+        if($_SESSION['uniqid'] == $args['id']) {
+            return $response->withRedirect($this->router->pathFor('profil'));
+        }
         $u = Users::find($args['id']);
         if ($u != null) {
             $org = false;
-            $epreuveUser = [];
-            $uepreuve = UserEpreuve::where('id_user','=',$args['id'])->get();
-            $epreuves = Epreuves::all();
-            die(var_dump($uepreuve));
-            $epreuves->filter(function($epreuve) {
-                $e = [];
-                if (in_array($epreuve->id));
-            });
-
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves join users_epreuves join users
+                                  where users.id=users_epreuves.id_users
+                                  and users_epreuves.id_epreuves=epreuves.id
+                                  and epreuves.id_evenement=events.id
+                                  and users.id='".$args['id']."'
+                                  order by events.date_debut desc");
+            $r = Results::where('id_utilisateur', $args['id'])
+                ->join('epreuves', 'results.id_epreuve','=','epreuves.id')
+                ->join('events', 'events.id', '=', 'epreuves.id_evenement')
+                ->orderBy('events.date_fin')
+                ->get(array('*', 'events.nom as nomE', 'epreuves.nom as nom'));
+            foreach ($r as $res) {
+                $res->date = $this->renderDate($res->date);
+            }
         } else {
             $u = Organisers::find($args['id']);
+            $e = Manager::select("select *, count(epreuves.id) as nb_epreuve
+                                  from events join epreuves
+                                  where epreuves.id_evenement=events.id
+                                  and events.id_organisateur='".$args['id']."'
+                                  order by events.date_debut desc");
+
             $org = true;
         }
+        foreach ($e as $event) {
+            $event->date_debut = $this->renderDate($event->date_debut);
+        }
+        $this->view->render($response, 'profilUser.twig', array('user' => $u, 'isOrg' => $org, 'events' => $e, 'results' => $r));
+    }
 
-        $this->view->render($response, 'profil.twig', array('user' => $u, 'isOrg' => $org));
+
+    private function renderDate($date){
+        $d = explode("-",$date);
+        return "$d[2]/$d[1]/$d[0]";
     }
 
     public function upload_resultat(Request $request, Response $response, $args){
@@ -365,5 +446,144 @@ final class UserController
             return $response->withRedirect($this->router->pathFor('loginuser'));
         }
 
+    }
+
+    public function addPanier(Request $request, Response $response, $args){
+
+      if (!isset($_SESSION['panier'])){
+        $_SESSION['panier'] = array();
+      }
+      $e = Epreuves::find($args['id']);
+      $e->id_elem = uniqid();
+      $e->nom_participant = Users::find($_SESSION['uniqid'])->nom;
+      $e->prenom_participant = Users::find($_SESSION['uniqid'])->prenom;
+      array_push($_SESSION['panier'],$e);
+      /**
+      $event = Events::find($e->id_evenement);
+
+      $organiser = Organisers::find($event->id_organisateur);
+      $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+      return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser  ));
+      */
+      $url = $this->router->pathFor('anEvent', ['id' => $e->id_evenement]);
+      return $response->withRedirect($url);
+    }
+
+    public function addPanierGroup(Request $request, Response $response, $args){
+      if (!isset($_SESSION['panier'])){
+        $_SESSION['panier'] = array();
+      }
+      $epreuve = Epreuves::find($args['idepreuve']);
+      $epreuve_responsable = new Epreuves();
+      $epreuve_responsable = $epreuve;
+      $epreuve_responsable->id_participant = $_SESSION['uniqid'];
+      $epreuve_responsable->nom_responsable = Users::find($_SESSION['uniqid'])->nom;
+      $epreuve_responsable->prenom_responsable = Users::find($_SESSION['uniqid'])->prenom;
+      $epreuve_responsable->id_elem = uniqid();
+      array_push($_SESSION['panier'],$epreuve);
+      foreach (UserGroup::where('id_group','=',$args['idgroupe'])->get() as $membres) {
+        $new_epreuve = new Epreuves();
+        $new_epreuve->id = $epreuve->id;
+        $new_epreuve->nom = $epreuve->nom;
+        $new_epreuve->description = $epreuve->description;
+        $new_epreuve->date = $epreuve->date;
+        $new_epreuve->inscription = $epreuve->inscription;
+        $new_epreuve->id_evenement = $epreuve->id_evenement;
+        $new_epreuve->nb_participants = $epreuve->nb_participants;
+        $new_epreuve->nb_participants_max = $epreuve->nb_participants_max;
+        $new_epreuve->prix = $epreuve->prix;
+        $new_epreuve->discipline = $epreuve->discipline;
+        $new_epreuve->image = $epreuve->image;
+        $new_epreuve->id_participant = $membres->id_utilisateur;
+        $new_epreuve->nom_participant = Users::find($membres->id_utilisateur)->nom;
+        $new_epreuve->prenom_participant = Users::find($membres->id_utilisateur)->prenom;
+        $new_epreuve->id_elem = uniqid();
+        array_push($_SESSION['panier'],$new_epreuve);
+      }
+      //$e->prix = $e->prix * UserGroup::where('id_group','=',$args['idgroup'])->count();
+      //array_push($_SESSION['panier'],$e);
+      $event = Events::find($epreuve->id_evenement);
+      $organiser = Organisers::find($event->id_organisateur);
+      $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
+
+      //a remplacer par un redirect !!!
+      if (Groups::where('id_responsable','=',$_SESSION['uniqid'])->count()  > 0){
+        $tabGroups = array();
+        foreach (Groups::where('id_responsable','=',$_SESSION['uniqid'])->get() as $group) {
+            array_push($tabGroups,$group);
+        }
+      }
+      //return $this->view->render($response,'anEvent.twig',array( 'event'=>$event,'tabEpreuve'=>$tabEpreuve, 'organiser'=>$organiser, 'tabGroups'=>$tabGroups  ));
+      $url = $this->router->pathFor('anEvent', ['id' => $epreuve->id_evenement]);
+      return $response->withRedirect($url);
+    }
+
+    public function panier(Request $request, Response $response, $args){
+      $prix_total = 0;
+      foreach ($_SESSION['panier'] as $elem) {
+        $prix_total = $prix_total + $elem->prix;
+      }
+      return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+    }
+
+    public function delelempanier(Request $request, Response $response, $args){
+
+      $tab = array();
+      foreach ($_SESSION['panier'] as $value) {
+        if($value->id_elem != $args['idelem']){
+          array_push($tab, $value);
+        }
+      }
+      unset($_SESSION['panier']);
+      $_SESSION['panier']= array();
+      $prix_total = 0;
+      foreach ($tab as $new_value) {
+        array_push($_SESSION['panier'], $new_value);
+        $prix_total = $prix_total + $new_value->prix;
+      }
+      //return $this->view->render($response,'panier.twig',array( 'elements'=>$_SESSION['panier'] , 'prix_total'=>$prix_total));
+      $url = $this->router->pathFor('panier');
+      return $response->withRedirect($url);
+    }
+
+    public function inscriptionall(Request $request, Response $response, $args){
+      foreach($_SESSION['panier'] as $epreuve){
+
+        $e = new UserEpreuve();
+        $e->id_users = $epreuve->id_participant;
+        $e->id_epreuves = $epreuve->id;
+        $e->num_dossard = UserEpreuve::where('id_epreuves','=',$epreuve->id)->max('num_dossard') + 1;
+        $e->save();
+
+      }
+      $_SESSION['panier'] = array();
+      return $response->withRedirect($this->router->pathFor('homepage'));
+    }
+
+    public function creategroup(Request $request, Response $response, $args){
+      return $this->view->render($response, 'creategroup.twig');
+    }
+
+    public function addgroup(Request $request, Response $response, $args){
+      $nom_group = $_POST['name_group'];
+      $new_group = new Groups();
+      $new_group->id = uniqid();
+      $new_group->nom = $nom_group;
+      $new_group->id_responsable = $_SESSION['uniqid'];
+
+      $tab_adherent = array();
+      foreach ($_POST['email_adherents'] as $adherent){
+        if (Users::where('email','=',$adherent)->count() > 0){
+          $new_adherent = new UserGroup();
+          $new_adherent->id_utilisateur = Users::where('email','=',$adherent)->first()->id;
+          $new_adherent->id_group = $new_group->id;
+          array_push($tab_adherent, $new_adherent);
+        }
+      }
+      $new_group->save();
+      foreach ($tab_adherent as $adherent) {
+        $adherent->save();
+      }
+      return $response->withRedirect($this->router->pathFor('homepage'));
     }
 }

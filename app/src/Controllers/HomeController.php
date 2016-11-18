@@ -34,21 +34,20 @@ final class HomeController
     {
         if (isset($_SESSION['uniqid']) && isset($_SESSION['type'])) {
             if ($_SESSION['type'] == 'org') {
-                $e = Events::where('id_organisateur', $_SESSION['uniqid'])->orderBy('date_debut', 'desc')->first();
-                $e->date_debut = $this->renderDate($e->date_debut);
-                $e->nb_epreuve = Epreuves::where('id_evenement', $e->id)->count();
-                switch ($e->etat) {
+                $event = Events::where('id_organisateur', $_SESSION['uniqid'])->orderBy('date_debut', 'desc')->first();
+                $event->date_debut = $this->renderDate($event->date_debut);
+                $event->nb_epreuve = Epreuves::where('id_evenement', $event->id)->count();
+                switch ($event->etat) {
                     case 'nonvalide':
-                        $e->etat = "Non validé";
+                        $event->etat = "Non validé";
                         break;
                     case 'valide':
-                        $e->etat = "Non validé";
+                        $event->etat = "Non validé";
                         break;
                 }
-                $this->view->render($response, 'hello_org.twig', ['e' => $e]);
-
+                $this->view->render($response, 'hello_org.twig',['e'=>$event]);
             } else {
-                $u = Users::find($_SESSION['uniqid']);
+                $user = Users::find($_SESSION['uniqid']);
                 $this->view->render($response, 'hello_user.twig');
 
             }

@@ -1,6 +1,8 @@
 <div class="container">
     {% if events  |length <= 0 %}
+
     <div class="row col s12 m8 l8 center card-panel "><h4>Vous n'avez pas encore créé d'évènements, pour commencer
+
             rendez vous sur
             <a href="/createevent">Créer un évènement</a>
         </h4></div>
@@ -51,5 +53,6 @@
                     </div>
                 {% endif %}
             {% endfor %}
+
         </div>
 {% endif %}

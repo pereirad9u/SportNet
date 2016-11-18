@@ -31,7 +31,6 @@
 <ul id="dropdown3" class="dropdown-content dropdown ">
     <li><a href="/profil" class="teal-text">Voir profil</a></li>
     <li class="divider teal"></li>
-
     <li><a href="/logout" class="teal-text">Deconnexion</a></li>
 </ul>
 
@@ -117,7 +116,7 @@
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown2">mes évènements<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% else %}
                     <li><a class="dropdown-button" href="#!" data-activates="dropdown3">{{ user.prenom }} {{ user.nom }}<i class="material-icons right">arrow_drop_down</i></a></li>
-
+                    <li><a href="/panier"><i class="material-icons">shopping_cart</i></a></li>
                 {% endif %}
             {% endif %}
         </ul>

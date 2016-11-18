@@ -44,11 +44,26 @@ $app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout')
 
 $app->get('/resultat/{id}', 'App\Controllers\EventController:affichageResultat');
 
+$app->get('/profil', 'App\Controllers\UserController:profil')->setName('profil');
 
-$app->get('/profil/{id}', 'App\Controllers\UserController:profil')->setName('profil');
+$app->get('/profil/{id}', 'App\Controllers\UserController:profilUser');
 
 $app->get('/manageEvents', 'App\Controllers\EventController:manage')->setName('manage');
 
+$app->get('/search', 'App\Controllers\HomeController:search')->setName('search');
+
+$app->get('/addpanier/{id}','App\Controllers\UserController:addPanier')->setName('addpanier');
+
+$app->get('/addpanier/{idepreuve}/{idgroupe}','App\Controllers\UserController:addPanierGroup')->setName('addpanier');
+
+$app->get('/panier','App\Controllers\UserController:panier')->setName('panier');
+
+$app->get('/delElemPanier/{idelem}','App\Controllers\UserController:delelempanier');
+
 $app->get('/inscription/{id}','App\Controllers\UserController:inscription')->setName('inscription');
 
-$app->get('/search', 'App\Controllers\HomeController:search')->setName('search');
+$app->get('/inscriptionall', 'App\Controllers\UserController:inscriptionall')->setName('inscriptionall');
+
+$app->get('/creategroup', 'App\Controllers\UserController:creategroup')->setName('creategroup');
+
+$app->post('/creategroup', 'App\Controllers\UserController:addgroup');
