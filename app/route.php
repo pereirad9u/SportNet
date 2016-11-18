@@ -58,7 +58,7 @@ $app->get('/addpanier/{idepreuve}/{idgroupe}','App\Controllers\UserController:ad
 
 $app->get('/panier','App\Controllers\UserController:panier')->setName('panier');
 
-$app->get('/delElemPanier/{id}','App\Controllers\UserController:delelempanier');
+$app->get('/delElemPanier/{idelem}','App\Controllers\UserController:delelempanier');
 
 $app->get('/inscription/{id}','App\Controllers\UserController:inscription')->setName('inscription');
 
