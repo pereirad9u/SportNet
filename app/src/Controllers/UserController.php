@@ -502,6 +502,7 @@ final class UserController
         return $response->withRedirect($url);
     }
 
+
     public function addPanierGroup(Request $request, Response $response, $args)
     {
 
