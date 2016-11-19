@@ -46,7 +46,7 @@ class EpreuveController
         $date = $this->modifDate($_POST['date']);
         $description = filter_var ( $_POST['description'], FILTER_SANITIZE_STRING );
         $nbParticipant = filter_var ( $_POST['nbParticipant'], FILTER_SANITIZE_NUMBER_INT );
-        $prix = filter_var ( $_POST['nbParticipant'], FILTER_SANITIZE_NUMBER_INT );
+        $prix = filter_var ( $_POST['prix'], FILTER_SANITIZE_NUMBER_INT );
         $discipline = filter_var ( $_POST['discipline'], FILTER_SANITIZE_STRING );
 
         if ($_FILES['image']['name'] != "") {
