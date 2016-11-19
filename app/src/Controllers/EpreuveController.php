@@ -35,7 +35,8 @@ class EpreuveController
     }
 
     public function creationEpreuve(Request $request, Response $response, $args) {
-        return $this->view->render($response, 'creationEpreuve.twig', []);
+         return $this->view->render($response, 'creationEpreuve.twig', []);
+
     }
 
     public function saveEpreuve(Request $request, Response $response, $args){

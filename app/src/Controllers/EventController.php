@@ -68,10 +68,19 @@ final class EventController
     }
 
     public function anEventOrg(Request $request, Response $response,$args){
-        $url = $_SERVER['HTTP_HOST'].substr($_SERVER['PATH_INFO'], 0, 8).substr($_SERVER['PATH_INFO'], 11);
+
         $event = Events::find($args['id']);
-        $tabEpreuve = Epreuves::where('id_evenement','like',$event->id)->get();
-        return $this->view->render($response,'anEventOrg.twig', array('url'=>$url, 'event'=>$event,'tabEpreuve'=>$tabEpreuve  ));
+        if($event['id_organisateur']==$_SESSION['uniqid']) {
+
+
+            $url = $_SERVER['HTTP_HOST'] . substr($_SERVER['PATH_INFO'], 0, 8) . substr($_SERVER['PATH_INFO'], 11);
+
+            $tabEpreuve = Epreuves::where('id_evenement', 'like', $event->id)->get();
+            return $this->view->render($response, 'anEventOrg.twig', array('url' => $url, 'event' => $event, 'tabEpreuve' => $tabEpreuve));
+        }else{
+            $url = $this->router->pathfor('homepage');
+            return $response->withStatus(302)->withHeader('Location',$url);
+        }
     }
 
     public function anEvent(Request $request, Response $response,$args){
