@@ -610,8 +610,8 @@ final class UserController
             $e->id_epreuves = $epreuve->id;
             $e->num_dossard = UserEpreuve::where('id_epreuves', '=', $epreuve->id)->max('num_dossard') + 1;
 
-            $epreuve_select = Epreuve::where($epreuve_id)->first();
-            $epreuve_select->nb_participant++;
+            $epreuve_select = Epreuves::where('id','=',$epreuve->id)->first();
+            $epreuve_select->nb_participants++;
 
             $e->save();
             $epreuve_select->save();
