@@ -126,13 +126,7 @@ final class HomeController
             foreach ($epreuves as $epreuve) {
                 foreach ($events as $event) {
 
-                    echo '<pre>';
-                    var_dump($epreuve->id);
-                    echo '</pre>';
-
-                    echo '<pre>';
-                    var_dump($event->id);
-                    echo '</pre>';
+                    
                     if ($event->id == $epreuve->id_evenement) {
                         array_push($temp_events, $event);
                     }
