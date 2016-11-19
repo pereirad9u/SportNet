@@ -504,6 +504,7 @@ final class UserController
 
     public function addPanierGroup(Request $request, Response $response, $args)
     {
+
         if (!isset($_SESSION['panier'])) {
             $_SESSION['panier'] = array();
         }

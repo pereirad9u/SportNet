@@ -35,7 +35,16 @@ class EpreuveController
     }
 
     public function creationEpreuve(Request $request, Response $response, $args) {
-        return $this->view->render($response, 'creationEpreuve.twig', []);
+        $event = Events::find($args['id']);
+        if($event['id_organisateur']==$_SESSION['uniqid']) {
+
+            return $this->view->render($response, 'creationEpreuve.twig', []);
+
+        }else{
+            $url = $this->router->pathfor('homepage');
+            return $response->withStatus(302)->withHeader('Location',$url);
+        }
+
     }
 
     public function saveEpreuve(Request $request, Response $response, $args){
