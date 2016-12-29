@@ -55,7 +55,7 @@ and go enjoy on SportNet
 
 ###Login user test
 
-To test all features quickly we have include a user with pics already post, comments and likes and follows.
+To test all features quickly we have include a user and an organiser with some event.
 
 for User :
 Username : postel@email.user
